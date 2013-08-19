@@ -1,0 +1,9 @@
+{
+    "name": "am-authentication",
+    "version": "0.0.0",
+    "main": "./lib/index.js",
+    "ignore": [
+        "node_modules",
+        "components"
+    ]
+}

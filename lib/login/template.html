@@ -1,0 +1,54 @@
+<!-- START LOGIN FORM -->
+<div class="well span4">
+    <form id="login-form" class="" method="post" novalidate name="loginForm" ng-submit="submit()">
+        <h1>Login</h1>
+        <hr/>
+        <!-- EMAIL -->
+        <label for="login-email">Email</label>
+        <input id="login-email"
+               ng-model="email"
+               name="email"
+               type="email"
+               class="email"
+               placeholder="@email"
+               ng-disabled="loading"
+               ng-required="true"
+                />
+
+        <div class="alert alert-error" ng-show="loginForm.email.$invalid && loginForm.email.$dirty && loginForm.email.$error.required">
+            <strong>Invalid Email!</strong><br/>You must provide an email
+        </div>
+
+        <!-- PASSWORD -->
+
+        <label for="login-password">Password</label>
+        <input id="login-password"
+               ng-model="password"
+               type="password"
+               name="password"
+               class="pass"
+               placeholder="Password"
+               ng-minlength="6"
+               ng-disabled="loading"
+               ng-required="true"
+                >
+        <div class="alert alert-error" ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.minlength">
+            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long
+        </div>
+        <div class="alert alert-error" ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.required">
+            <strong>Invalid Password!</strong><br/>You must provide a password
+        </div>
+
+        <button id="login-submit" type="submit" class="btn btn-primary" ng-disabled="loading || loginForm.$invalid">
+            {{text.submit}}
+        </button>
+        <div class="clear-fix"></div>
+        <div class="alert alert-error" ng-show="text.error">
+            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}
+        </div>
+        <hr/>
+        <a href="" ng-click="forgot()" ng-show="forgotRedirect" id="login-forgot-password">Forgot Your Password?</a>
+        <a href="" ng-click="create()" ng-show="createRedirect" id="login-create-account">Create An Account</a>
+    </form>
+</div>
+<!-- END LOGIN FORM -->

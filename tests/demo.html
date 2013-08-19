@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="../dist/styles/main.css">
+</head>
+<html>
+<body>
+
+<div am-login
+     class="login-container"
+     email="email"
+     password="password"
+     success-redirect="application"
+     forgot-redirect="forgot"
+     create-redirect="register"
+     endpoint="/login"
+        >
+</div>
+<script src="../components/angular/angular.min.js"></script>
+<script src="../require.config.js"></script>
+<script data-main="tests/demo.js" src="../components/requirejs/require.js"></script>
+
+</body>
+</html>
