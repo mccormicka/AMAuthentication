@@ -40,6 +40,8 @@
         "afterEach",
         "expect",
         "default",
-        "spyOn"
+        "spyOn",
+        "inject",
+        "module"
     ]
 }

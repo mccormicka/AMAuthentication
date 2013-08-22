@@ -3,18 +3,24 @@
     <link rel="stylesheet" href="../dist/styles/main.css">
 </head>
 <html>
-<body>
+<body ng-controller="demoCtrl">
 
-<div am-login
+<div am-auth-panel
      class="login-container"
      email="email"
      password="password"
-     success-redirect="application"
+     login-success="application"
+     login-endpoint="/login"
+     login-redirect="login"
+     login-error-formatter="errorFormatter(value)"
+     register-success="application"
+     register-endpoint="/register"
+     register-redirect="application"
      forgot-redirect="forgot"
-     create-redirect="register"
-     endpoint="/login"
+     register-error-formatter="errorFormatter(value)"
         >
 </div>
+
 <script src="../components/angular/angular.min.js"></script>
 <script src="../require.config.js"></script>
 <script data-main="tests/demo.js" src="../components/requirejs/require.js"></script>

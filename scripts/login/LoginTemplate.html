@@ -15,7 +15,8 @@
                ng-required="true"
                 />
 
-        <div class="alert alert-error" ng-show="loginForm.email.$invalid && loginForm.email.$dirty && loginForm.email.$error.required">
+        <div class="alert alert-error"
+             ng-show="loginForm.email.$invalid && loginForm.email.$dirty && loginForm.email.$error.required">
             <strong>Invalid Email!</strong><br/>You must provide an email
         </div>
 
@@ -32,10 +33,13 @@
                ng-disabled="loading"
                ng-required="true"
                 >
-        <div class="alert alert-error" ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.minlength">
+
+        <div class="alert alert-error"
+             ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.minlength">
             <strong>Invalid Password!</strong><br/>Must be at least 6 characters long
         </div>
-        <div class="alert alert-error" ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.required">
+        <div class="alert alert-error"
+             ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.required">
             <strong>Invalid Password!</strong><br/>You must provide a password
         </div>
 
@@ -48,7 +52,7 @@
         </div>
         <hr/>
         <a href="" ng-click="forgot()" ng-show="forgotRedirect" id="login-forgot-password">Forgot Your Password?</a>
-        <a href="" ng-click="create()" ng-show="createRedirect" id="login-create-account">Create An Account</a>
+        <a href="" ng-click="register()" ng-show="registerRedirect" id="login-create-account">Create An Account</a>
     </form>
 </div>
 <!-- END LOGIN FORM -->

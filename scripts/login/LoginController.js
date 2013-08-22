@@ -1,21 +1,21 @@
 define(function () {
     'use strict';
 
-    function LoginController($scope, $http, $location, $window) {
+    function LoginController($scope, $http, $location, $window, errorFormatter) {
         $scope.loading = false;
         $scope.text = {
-            submit:'Submit'
+            submit: 'Submit'
         };
 
-        if($location.search().hasOwnProperty('email')){
+        if ($location.search().hasOwnProperty('email')) {
             $scope.email = $location.search().email;
         }
 
-        $scope.create = function(){
-            $location.hash($scope.createRedirect);
+        $scope.register = function () {
+            $location.hash($scope.registerRedirect);
         };
 
-        $scope.forgot = function(){
+        $scope.forgot = function () {
             $location.hash($scope.forgotRedirect);
         };
 
@@ -27,19 +27,20 @@ define(function () {
                 .success(function () {
                     $window.location.href = $scope.successRedirect;
                 })
-                .error(function(data){
+                .error(function (data) {
+
                     $scope.text.submit = 'Submit';
                     $scope.loading = false;
-                    if(data && data.key && data.description){
-                        $scope.text.error = {
-                            title:data.key,
-                            description:data.description
-                        };
-                    }
+                    var message = $scope.errorFormatter && $scope.errorFormatter(data) || errorFormatter.formatError(data);
+                    $scope.text.error = {
+                        title: message.title,
+                        description: message.description
+                    };
                 });
         };
     }
-    LoginController.$inject = [ '$scope', '$http', '$location', '$window'];
+
+    LoginController.$inject = [ '$scope', '$http', '$location', '$window', 'errorFormatter'];
     return LoginController;
 });
 

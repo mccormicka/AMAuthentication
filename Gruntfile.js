@@ -6,7 +6,7 @@ module.exports = function (grunt) {
         [ 'karma:setup', 'build', 'watch']);
 
     grunt.registerTask('build',
-        ['clean', 'shell:generateTests', 'jshint','karma:setup:run', 'requirejs:dev', 'requirejs:dist', 'compass:dev']);
+        ['clean', 'shell:generateTests', 'jshint', 'requirejs:dev', 'requirejs:dist', 'compass:dev', 'karma:setup:run']);
 
     // Project configuration.
     grunt.initConfig({
@@ -55,18 +55,13 @@ module.exports = function (grunt) {
                 jshintrc: '.jshintrc'
             },
             files: {src: [
-                'lib/**/*.js',
-                'tests/**/*.js',
-                '!tests/karma*.js'
+                'scripts/**/*.js'
             ]}
         },
 
         watch: {
-            //run client tests with karma when client code changes (server needs to be already running, 'karma:test')
-            client: {
-                files: ['lib/**/*', 'tests/**/*.spec.js'],
-                tasks: ['build' ]
-            }
+            files: ['scripts/**/*'],
+            tasks: ['build']
         },
 
         //Compile stylesheets
@@ -95,7 +90,7 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     paths: {
-                        'am-authentication': 'lib/index'
+                        'am-authentication': 'scripts/index'
                     },
                     name: 'am-authentication',
                     baseUrl: './',
@@ -111,7 +106,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     paths: {
-                        'am-authentication': 'lib/index'
+                        'am-authentication': 'scripts/index'
                     },
                     name: 'am-authentication',
                     baseUrl: './',

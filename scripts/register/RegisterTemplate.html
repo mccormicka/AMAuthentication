@@ -1,0 +1,54 @@
+<!-- START REGISTRATION FORM -->
+<div class="well span4">
+    <form id="register-form" class="" method="post" novalidate name="registerForm" ng-submit="submit()">
+        <h1>Register</h1>
+        <hr/>
+        <!-- EMAIL -->
+        <label for="register-email">Email</label>
+        <input id="register-email"
+               ng-model="email"
+               name="email"
+               type="email"
+               class="email"
+               placeholder="@email"
+               ng-disabled="loading"
+               ng-required="true"
+                />
+
+        <div class="alert alert-error" ng-show="registerForm.email.$invalid && registerForm.email.$dirty && registerForm.email.$error.required">
+            <strong>Invalid Email!</strong><br/>You must provide an email
+        </div>
+
+        <!-- PASSWORD -->
+
+        <label for="register-password">Password</label>
+        <input id="register-password"
+               ng-model="password"
+               type="password"
+               name="password"
+               class="pass"
+               placeholder="Password"
+               ng-minlength="6"
+               ng-disabled="loading"
+               ng-required="true"
+                >
+        <div class="alert alert-error" ng-show="registerForm.password.$invalid && registerForm.password.$dirty && registerForm.password.$error.minlength">
+            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long
+        </div>
+        <div class="alert alert-error" ng-show="registerForm.password.$invalid && registerForm.password.$dirty && registerForm.password.$error.required">
+            <strong>Invalid Password!</strong><br/>You must provide a password
+        </div>
+
+        <button id="register-submit" type="submit" class="btn btn-primary" ng-disabled="loading || registerForm.$invalid">
+            {{text.submit}}
+        </button>
+        <div class="clear-fix"></div>
+        <div class="alert alert-error" ng-show="text.error">
+            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}
+        </div>
+        <hr/>
+        <a href="" ng-click="forgot()" ng-show="forgotRedirect" id="register-forgot-password">Forgot Your Password?</a>
+        <a href="" ng-click="login()" ng-show="loginRedirect" id="register-create-account">Sign In</a>
+    </form>
+</div>
+<!-- END REGISTRATION FORM -->

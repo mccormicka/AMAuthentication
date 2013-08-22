@@ -10,6 +10,7 @@
     "text": "~2.0.10"
   },
   "devDependencies": {
-    "requirejs": "~2.1.8"
+    "requirejs": "~2.1.8",
+    "angular-mocks": "~1.2.0rc1"
   }
 }

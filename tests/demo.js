@@ -3,7 +3,14 @@ define(function (require) {
     require('am-authentication');
     var angular = require('angular');
 
-    angular.bootstrap(document,['am.authentication']);
+    angular.module('demo', ['am.authentication'])
+        .controller('demoCtrl', function ($scope) {
+            $scope.errorFormatter = function () {
+                return {title: 'demo', description: 'demo'};
+            };
+        });
+
+    angular.bootstrap(document, ['demo']);
 
 });
 
