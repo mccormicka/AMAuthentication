@@ -49,7 +49,7 @@ define(function (require) {
 
             it('Show an error message when there is an invalid email password sent to the server', function () {
                 $httpBackend.expectPOST('/login', {email: 'test@test.com', password: 'testing'}).respond(400,{
-                    'key': 'api.error.invalid.params',
+                    'title': 'api.error.invalid.params',
                     'status': 400,
                     'description': 'Invalid Parameters were supplied with the request'
                 });

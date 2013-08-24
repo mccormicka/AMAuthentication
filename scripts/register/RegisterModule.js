@@ -2,9 +2,11 @@ define(function (require) {
     'use strict';
 
     var angular = require('angular');
-    angular.module('amRegisterModule', [])
+    var module = angular.module('amRegisterModule', [])
         .directive('amRegister', require('scripts/register/RegisterDirective'))
-        .value('errorFormatter', require('scripts/util/ErrorFormatter'));
+        .value('responseFormatter', require('scripts/util/ResponseFormatter'));
+
+    return module;
 });
 
 

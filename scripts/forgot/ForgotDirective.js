@@ -5,17 +5,19 @@ define(function (require) {
         return {
             scope: {
                 email: '=',
-                password: '=',
                 successRedirect: '@',
-                forgotRedirect: '@',
                 loginRedirect: '@',
+                registerRedirect: '@',
                 endpoint: '@',
-                errorFormatter:'&'
+                errorFormatter:'&',
+                successFormatter:'&'
             },
-            template: require('text!scripts/register/RegisterTemplate.html'),
-            controller: require('scripts/register/RegisterController')
+            template: require('text!scripts/forgot/ForgotTemplate.html'),
+            controller: require('scripts/forgot/ForgotController')
         };
     }
 
     return Directive;
 });
+
+

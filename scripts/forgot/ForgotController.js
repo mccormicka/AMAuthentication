@@ -1,7 +1,7 @@
 define(function () {
     'use strict';
 
-    function Controller($scope, $http, $location, $window, responseFormatter) {
+    function Controller($scope, $http, $location, responseFormatter) {
         $scope.loading = false;
         $scope.text = {
             submit: 'Submit'
@@ -15,32 +15,28 @@ define(function () {
             $location.hash($scope.registerRedirect);
         };
 
-        $scope.forgot = function () {
-            $location.hash($scope.forgotRedirect);
+        $scope.login = function () {
+            $location.hash($scope.loginRedirect);
         };
 
         $scope.submit = function () {
             $scope.text.error = null;
+            $scope.text.success = null;
             $scope.text.submit = 'Loading...';
             $scope.loading = true;
             $http.post($scope.endpoint, {email: $scope.email, password: $scope.password})
-                .success(function () {
-                    $window.location.href = $scope.successRedirect;
+                .success(function (data) {
+                    $scope.text.success = $scope.successFormatter && $scope.successFormatter(data) || responseFormatter.formatSuccess(data);
                 })
                 .error(function (data) {
-
                     $scope.text.submit = 'Submit';
                     $scope.loading = false;
-                    var message = $scope.errorFormatter && $scope.errorFormatter(data) || responseFormatter.formatError(data);
-                    $scope.text.error = {
-                        title: message.title,
-                        description: message.description
-                    };
+                    $scope.text.error = $scope.errorFormatter && $scope.errorFormatter(data) || responseFormatter.formatError(data);
                 });
         };
     }
 
-    Controller.$inject = [ '$scope', '$http', '$location', '$window', 'responseFormatter'];
+    Controller.$inject = [ '$scope', '$http', '$location', 'responseFormatter'];
     return Controller;
 });
 

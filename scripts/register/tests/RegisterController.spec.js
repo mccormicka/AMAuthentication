@@ -4,7 +4,7 @@ define(function (require) {
     require('angular-mocks');
     var Test = require('scripts/register/RegisterController');
 
-    var errorFormatter = require('scripts/util/ErrorFormatter');
+    var errorFormatter = require('scripts/util/ResponseFormatter');
 
     describe('RegisterController Tests', function () {
 
@@ -82,7 +82,10 @@ define(function (require) {
                 scope.submit();
                 $httpBackend.flush();
                 expect($window.location.href).toBe('');
-                expect(scope.text.error).toEqual({ title: 'invalid.request', description: 'Server responded with an Error' });
+                expect(scope.text.error).toEqual({
+                    title: 'Error!',
+                    description: 'Server responded with an Error'
+                });
             });
 
             it('Set scope error when an invalid username and password are sent to the server on submit', function () {
@@ -99,7 +102,7 @@ define(function (require) {
                             'field': 'password'
                         }
                     ],
-                    'key': 'api.error.invalid.params',
+                    'title': 'api.error.invalid.params',
                     'code': 40002,
                     'status': 400,
                     'description': 'Invalid Parameters were supplied with the request',
@@ -119,7 +122,10 @@ define(function (require) {
                 scope.submit();
                 $httpBackend.flush();
                 expect($window.location.href).toBe('');
-                expect(scope.text.error).toEqual({ title : 'invalid.request', description : 'Server responded with an Error' } );
+                expect(scope.text.error).toEqual({
+                    title: 'Error!',
+                    description: 'Server responded with an Error'
+                });
             });
 
             it('Use an error formatter if present', function () {

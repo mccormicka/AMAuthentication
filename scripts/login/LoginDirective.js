@@ -1,7 +1,7 @@
 define(function (require) {
     'use strict';
 
-    function LoginDirective() {
+    function Directive() {
         return {
             scope: {
                 email: '=',
@@ -17,7 +17,7 @@ define(function (require) {
         };
     }
 
-    return LoginDirective;
+    return Directive;
 });
 
 

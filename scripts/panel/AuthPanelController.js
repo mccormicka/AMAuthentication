@@ -22,18 +22,22 @@ define(function () {
 
         function resetViews() {
             //Reset all views to false
-            $scope.register = $scope.login = false;
+            $scope.login = $scope.register = $scope.forgot = false;
         }
 
         function updateView(newValue) {
             switch (newValue) {
+            case $scope.loginRedirect:
+                resetViews();
+                $scope.login = true;
+                break;
             case $scope.registerRedirect:
                 resetViews();
                 $scope.register = true;
                 break;
-            case $scope.loginRedirect:
+            case $scope.forgotRedirect:
                 resetViews();
-                $scope.login = true;
+                $scope.forgot = true;
                 break;
             }
         }

@@ -24,4 +24,16 @@
         >
 </div>
 
+<div am-forgot
+     ng-show="$parent.forgot"
+     class="forgot-container"
+     email="email"
+     success-redirect="{{forgotSuccess}}"
+     register-redirect="{{registerRedirect}}"
+     login-redirect="{{loginRedirect}}"
+     endpoint="{{forgotEndpoint}}"
+     error-formatter="forgotErrorFormatter(value)"
+        >
+</div>
+
 <!-- END AUTH FORM -->

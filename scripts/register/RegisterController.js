@@ -1,7 +1,7 @@
 define(function () {
     'use strict';
 
-    function Controller($scope, $http, $location, $window, errorFormatter) {
+    function Controller($scope, $http, $location, $window, responseFormatter) {
         $scope.loading = false;
         $scope.text = {
             submit: 'Sign Up'
@@ -32,7 +32,7 @@ define(function () {
                     $scope.text.submit = 'Submit';
                     $scope.loading = false;
 
-                    var message = $scope.errorFormatter && $scope.errorFormatter(data) || errorFormatter.formatError(data);
+                    var message = $scope.errorFormatter && $scope.errorFormatter(data) || responseFormatter.formatError(data);
                     $scope.text.error = {
                         title: message.title,
                         description: message.description
@@ -41,6 +41,6 @@ define(function () {
         };
     }
 
-    Controller.$inject = [ '$scope', '$http', '$location', '$window', 'errorFormatter'];
+    Controller.$inject = [ '$scope', '$http', '$location', '$window', 'responseFormatter'];
     return Controller;
 });

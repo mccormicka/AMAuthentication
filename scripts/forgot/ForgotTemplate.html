@@ -1,0 +1,40 @@
+<!-- START FORGOT PASSWORD FORM -->
+<div class="well span4">
+    <form ng-hide="text.success" id="forgot-form" class="" method="post" novalidate name="forgotForm" ng-submit="submit()">
+        <h1>Forgot Password</h1>
+        <hr/>
+        <!-- EMAIL -->
+        <label for="forgot-email">Email</label>
+        <input id="forgot-email"
+               ng-model="email"
+               name="email"
+               type="email"
+               class="email"
+               placeholder="@email"
+               ng-disabled="loading"
+               ng-required="true"
+                />
+
+        <div class="alert alert-error" ng-show="forgotForm.email.$invalid && forgotForm.email.$dirty && forgotForm.email.$error.required">
+            <strong>Invalid Email!</strong><br/>You must provide an email
+        </div>
+
+        <button id="forgot-submit" type="submit" class="btn btn-primary" ng-disabled="loading || forgotForm.$invalid">
+            {{text.submit}}
+        </button>
+        <div class="clear-fix"></div>
+        <div class="alert alert-error" ng-show="text.error">
+            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}
+        </div>
+        <hr/>
+        <a href="" ng-click="register()" ng-show="registerRedirect">Create an Account</a>
+        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>
+    </form>
+
+    <div class="alert alert-success" ng-show="text.success">
+        <strong>{{text.success.title}}</strong><br/>{{text.success.description}}<br/>
+        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>
+    </div>
+
+</div>
+<!-- END FORGOT PASSWORD FORM -->
