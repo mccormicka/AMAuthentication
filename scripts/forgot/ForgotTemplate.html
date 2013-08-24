@@ -1,5 +1,5 @@
-<!-- START FORGOT PASSWORD FORM -->
 <div class="well span4">
+    <!-- START FORGOT PASSWORD FORM -->
     <form ng-hide="text.success" id="forgot-form" class="" method="post" novalidate name="forgotForm" ng-submit="submit()">
         <h1>Forgot Password</h1>
         <hr/>
@@ -18,7 +18,7 @@
         <div class="alert alert-error" ng-show="forgotForm.email.$invalid && forgotForm.email.$dirty && forgotForm.email.$error.required">
             <strong>Invalid Email!</strong><br/>You must provide an email
         </div>
-
+        <div class="clear-fix"></div>
         <button id="forgot-submit" type="submit" class="btn btn-primary" ng-disabled="loading || forgotForm.$invalid">
             {{text.submit}}
         </button>
@@ -35,6 +35,5 @@
         <strong>{{text.success.title}}</strong><br/>{{text.success.description}}<br/>
         <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>
     </div>
-
+    <!-- END FORGOT PASSWORD FORM -->
 </div>
-<!-- END FORGOT PASSWORD FORM -->

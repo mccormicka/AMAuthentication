@@ -3,6 +3,7 @@ define(function (require) {
 
     function Directive() {
         return {
+            replace:true,
             scope: {
                 email: '=',
                 password: '=',
@@ -19,7 +20,7 @@ define(function (require) {
                 //Forgot
                 forgotRedirect: '@',
                 forgotEndpoint: '@',
-                forgotSuccess: '@',
+                forgotSuccessFormatter: '&',
                 forgotErrorFormatter: '&'
             },
             template: require('text!scripts/panel/AuthPanelTemplate.html'),

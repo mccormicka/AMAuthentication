@@ -16,6 +16,7 @@ files = [
     //Need to include Angular mocks for testing
     'components/angular/angular.js',
     'components/angular-mocks/angular-mocks.js',
+    'components/jquery/jquery.min.js',
 
     {pattern: 'components/**/**.js', included: false},
     {pattern: 'scripts/**/*.js', included: false},

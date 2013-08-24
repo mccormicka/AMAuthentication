@@ -12,13 +12,18 @@ define(function (require) {
 
         beforeEach(inject(function ($rootScope) {
             scope = $rootScope.$new();
+            //Login
             scope.loginRedirect = 'loginRedirect';
             scope.loginSuccess = 'loginSuccess';
             scope.loginEndpoint = 'loginEndpoint';
+            //register
             scope.registerRedirect = 'registerRedirect';
             scope.registerEndpoint = 'registerEndpoint';
             scope.registerSuccess = 'registerSuccess';
+            //forgot
             scope.forgotRedirect = 'forgotRedirect';
+            scope.forgotEndpoint = 'forgotRedirect';
+
             hash = '';
             $location = {
                 hash: function(){
@@ -58,8 +63,14 @@ define(function (require) {
                 expect(scope.login).toBe(true);
             });
 
-            xit('Update the active view when the hash changes to forgot', function () {
-                expect(false).toBeTruthy();
+            it('Update the active view when the hash changes to forgot', function () {
+                var controller = new Test(scope, $location);
+                scope.$digest();
+                expect(controller).toBeDefined();
+                expect(scope.login).toBe(true);
+                hash = scope.forgotRedirect;
+                scope.$digest();
+                expect(scope.forgot).toBe(true);
             });
 
             xit('Update the active view when the hash changes to reset', function () {

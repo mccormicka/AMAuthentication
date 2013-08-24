@@ -1,26 +1,15 @@
 
-define('text!scripts/login/LoginTemplate.html',[],function () { return '<!-- START LOGIN FORM -->\n<div class="well span4">\n    <form id="login-form" class="" method="post" novalidate name="loginForm" ng-submit="submit()">\n        <h1>Login</h1>\n        <hr/>\n        <!-- EMAIL -->\n        <label for="login-email">Email</label>\n        <input id="login-email"\n               ng-model="email"\n               name="email"\n               type="email"\n               class="email"\n               placeholder="@email"\n               ng-disabled="loading"\n               ng-required="true"\n                />\n\n        <div class="alert alert-error"\n             ng-show="loginForm.email.$invalid && loginForm.email.$dirty && loginForm.email.$error.required">\n            <strong>Invalid Email!</strong><br/>You must provide an email\n        </div>\n\n        <!-- PASSWORD -->\n\n        <label for="login-password">Password</label>\n        <input id="login-password"\n               ng-model="password"\n               type="password"\n               name="password"\n               class="pass"\n               placeholder="Password"\n               ng-minlength="6"\n               ng-disabled="loading"\n               ng-required="true"\n                >\n\n        <div class="alert alert-error"\n             ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.minlength">\n            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long\n        </div>\n        <div class="alert alert-error"\n             ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.required">\n            <strong>Invalid Password!</strong><br/>You must provide a password\n        </div>\n\n        <button id="login-submit" type="submit" class="btn btn-primary" ng-disabled="loading || loginForm.$invalid">\n            {{text.submit}}\n        </button>\n        <div class="clear-fix"></div>\n        <div class="alert alert-error" ng-show="text.error">\n            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}\n        </div>\n        <hr/>\n        <a href="" ng-click="forgot()" ng-show="forgotRedirect" id="login-forgot-password">Forgot Your Password?</a>\n        <a href="" ng-click="register()" ng-show="registerRedirect" id="login-create-account">Create An Account</a>\n    </form>\n</div>\n<!-- END LOGIN FORM -->';});
+define('text!scripts/login/LoginTemplate.html',[],function () { return '<div class="well span4">\n    <!-- START LOGIN FORM -->\n    <form id="login-form" class="" method="post" novalidate name="loginForm" ng-submit="submit()">\n        <h1>Login</h1>\n        <hr/>\n        <!-- EMAIL -->\n        <label for="login-email">Email</label>\n        <input id="login-email"\n               ng-model="email"\n               name="email"\n               type="email"\n               class="email"\n               placeholder="@email"\n               ng-disabled="loading"\n               ng-required="true"\n                />\n\n        <div class="alert alert-error"\n             ng-show="loginForm.email.$invalid && loginForm.email.$dirty && loginForm.email.$error.required">\n            <strong>Invalid Email!</strong><br/>You must provide an email\n        </div>\n\n        <!-- PASSWORD -->\n\n        <label for="login-password">Password</label>\n        <input id="login-password"\n               ng-model="password"\n               type="password"\n               name="password"\n               class="pass"\n               placeholder="Password"\n               ng-minlength="6"\n               ng-disabled="loading"\n               ng-required="true"\n                >\n\n        <div class="alert alert-error"\n             ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.minlength">\n            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long\n        </div>\n        <div class="alert alert-error"\n             ng-show="loginForm.password.$invalid && loginForm.password.$dirty && loginForm.password.$error.required">\n            <strong>Invalid Password!</strong><br/>You must provide a password\n        </div>\n        <div class="clear-fix"></div>\n        <button id="login-submit" type="submit" class="btn btn-primary" ng-disabled="loading || loginForm.$invalid">\n            {{text.submit}}\n        </button>\n        <div class="clear-fix"></div>\n        <div class="alert alert-error" ng-show="text.error">\n            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}\n        </div>\n        <hr/>\n        <a href="" ng-click="forgot()" ng-show="forgotRedirect" id="login-forgot-password">Forgot Your Password?</a>\n        <a href="" ng-click="register()" ng-show="registerRedirect" id="login-create-account">Create An Account</a>\n    </form>\n    <!-- END LOGIN FORM -->\n</div>';});
 
 define('scripts/login/LoginController',[],function () {
     
 
-    function Controller($scope, $http, $location, $window, responseFormatter) {
+    function Controller($scope, $http, $window, responseFormatter, redirectUtil) {
         $scope.loading = false;
         $scope.text = {
             submit: 'Submit'
         };
-
-        if ($location.search().hasOwnProperty('email')) {
-            $scope.email = $location.search().email;
-        }
-
-        $scope.register = function () {
-            $location.hash($scope.registerRedirect);
-        };
-
-        $scope.forgot = function () {
-            $location.hash($scope.forgotRedirect);
-        };
+        redirectUtil.init($scope);
 
         $scope.submit = function () {
             $scope.text.error = null;
@@ -43,17 +32,15 @@ define('scripts/login/LoginController',[],function () {
         };
     }
 
-    Controller.$inject = [ '$scope', '$http', '$location', '$window', 'responseFormatter'];
+    Controller.$inject = [ '$scope', '$http', '$window', 'responseFormatter', 'redirectUtil'];
     return Controller;
 });
-
-
-
 define('scripts/login/LoginDirective',['require','text!scripts/login/LoginTemplate.html','scripts/login/LoginController'],function (require) {
     
 
     function Directive() {
         return {
+            replace:true,
             scope: {
                 email: '=',
                 password: '=',
@@ -118,41 +105,60 @@ define('scripts/util/ResponseFormatter',[],function () {
 
 
 
-define('scripts/login/LoginModule',['require','angular','scripts/login/LoginDirective','scripts/util/ResponseFormatter'],function (require) {
+define('scripts/util/RedirectUtil',[],function () {
+    
+
+    function RedirectUtil($location){
+        this.init = function($scope){
+            if ($location.search().hasOwnProperty('email')) {
+                $scope.email = $location.search().email;
+            }
+
+            $scope.register = function () {
+                $location.hash($scope.registerRedirect);
+            };
+
+            $scope.forgot = function () {
+                $location.hash($scope.forgotRedirect);
+            };
+
+            $scope.login = function () {
+                $location.hash($scope.loginRedirect);
+            };
+        };
+    }
+    RedirectUtil.$inject = ['$location'];
+    return RedirectUtil;
+});
+
+
+
+define('scripts/login/LoginModule',['require','angular','scripts/login/LoginDirective','scripts/util/ResponseFormatter','scripts/util/RedirectUtil'],function (require) {
     
 
     var angular = require('angular');
     var module = angular.module('amLoginModule', [])
         .directive('amLogin', require('scripts/login/LoginDirective'))
-        .value('responseFormatter', require('scripts/util/ResponseFormatter'));
+        .value('responseFormatter', require('scripts/util/ResponseFormatter'))
+        .service('redirectUtil', require('scripts/util/RedirectUtil'));
 
     return module;
 });
 
 
 
-define('text!scripts/register/RegisterTemplate.html',[],function () { return '<!-- START REGISTRATION FORM -->\n<div class="well span4">\n    <form id="register-form" class="" method="post" novalidate name="registerForm" ng-submit="submit()">\n        <h1>Register</h1>\n        <hr/>\n        <!-- EMAIL -->\n        <label for="register-email">Email</label>\n        <input id="register-email"\n               ng-model="email"\n               name="email"\n               type="email"\n               class="email"\n               placeholder="@email"\n               ng-disabled="loading"\n               ng-required="true"\n                />\n\n        <div class="alert alert-error" ng-show="registerForm.email.$invalid && registerForm.email.$dirty && registerForm.email.$error.required">\n            <strong>Invalid Email!</strong><br/>You must provide an email\n        </div>\n\n        <!-- PASSWORD -->\n\n        <label for="register-password">Password</label>\n        <input id="register-password"\n               ng-model="password"\n               type="password"\n               name="password"\n               class="pass"\n               placeholder="Password"\n               ng-minlength="6"\n               ng-disabled="loading"\n               ng-required="true"\n                >\n        <div class="alert alert-error" ng-show="registerForm.password.$invalid && registerForm.password.$dirty && registerForm.password.$error.minlength">\n            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long\n        </div>\n        <div class="alert alert-error" ng-show="registerForm.password.$invalid && registerForm.password.$dirty && registerForm.password.$error.required">\n            <strong>Invalid Password!</strong><br/>You must provide a password\n        </div>\n\n        <button id="register-submit" type="submit" class="btn btn-primary" ng-disabled="loading || registerForm.$invalid">\n            {{text.submit}}\n        </button>\n        <div class="clear-fix"></div>\n        <div class="alert alert-error" ng-show="text.error">\n            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}\n        </div>\n        <hr/>\n        <a href="" ng-click="forgot()" ng-show="forgotRedirect" id="register-forgot-password">Forgot Your Password?</a>\n        <a href="" ng-click="login()" ng-show="loginRedirect" id="register-create-account">Sign In</a>\n    </form>\n</div>\n<!-- END REGISTRATION FORM -->';});
+define('text!scripts/register/RegisterTemplate.html',[],function () { return '<div class="well span4">\n    <!-- START REGISTRATION FORM -->\n    <form id="register-form" class="" method="post" novalidate name="registerForm" ng-submit="submit()">\n        <h1>Register</h1>\n        <hr/>\n        <!-- EMAIL -->\n        <label for="register-email">Email</label>\n        <input id="register-email"\n               ng-model="email"\n               name="email"\n               type="email"\n               class="email"\n               placeholder="@email"\n               ng-disabled="loading"\n               ng-required="true"\n                />\n\n        <div class="alert alert-error" ng-show="registerForm.email.$invalid && registerForm.email.$dirty && registerForm.email.$error.required">\n            <strong>Invalid Email!</strong><br/>You must provide an email\n        </div>\n\n        <!-- PASSWORD -->\n\n        <label for="register-password">Password</label>\n        <input id="register-password"\n               ng-model="password"\n               type="password"\n               name="password"\n               class="pass"\n               placeholder="Password"\n               ng-minlength="6"\n               ng-disabled="loading"\n               ng-required="true"\n                >\n        <div class="alert alert-error" ng-show="registerForm.password.$invalid && registerForm.password.$dirty && registerForm.password.$error.minlength">\n            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long\n        </div>\n        <div class="alert alert-error" ng-show="registerForm.password.$invalid && registerForm.password.$dirty && registerForm.password.$error.required">\n            <strong>Invalid Password!</strong><br/>You must provide a password\n        </div>\n        <div class="clear-fix"></div>\n        <button id="register-submit" type="submit" class="btn btn-primary" ng-disabled="loading || registerForm.$invalid">\n            {{text.submit}}\n        </button>\n        <div class="clear-fix"></div>\n        <div class="alert alert-error" ng-show="text.error">\n            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}\n        </div>\n        <hr/>\n        <a href="" ng-click="forgot()" ng-show="forgotRedirect" id="register-forgot-password">Forgot Your Password?</a>\n        <a href="" ng-click="login()" ng-show="loginRedirect" id="register-create-account">Sign In</a>\n    </form>\n    <!-- END REGISTRATION FORM -->\n</div>';});
 
 define('scripts/register/RegisterController',[],function () {
     
 
-    function Controller($scope, $http, $location, $window, responseFormatter) {
+    function Controller($scope, $http, $window, responseFormatter, redirectUtil) {
         $scope.loading = false;
         $scope.text = {
             submit: 'Sign Up'
         };
 
-        if ($location.search().hasOwnProperty('email')) {
-            $scope.email = $location.search().email;
-        }
-
-        $scope.login = function () {
-            $location.hash($scope.loginRedirect);
-        };
-
-        $scope.forgot = function () {
-            $location.hash($scope.forgotRedirect);
-        };
+        redirectUtil.init($scope);
 
         $scope.submit = function () {
             $scope.text.error = null;
@@ -176,7 +182,7 @@ define('scripts/register/RegisterController',[],function () {
         };
     }
 
-    Controller.$inject = [ '$scope', '$http', '$location', '$window', 'responseFormatter'];
+    Controller.$inject = [ '$scope', '$http', '$window', 'responseFormatter', 'redirectUtil'];
     return Controller;
 });
 define('scripts/register/RegisterDirective',['require','text!scripts/register/RegisterTemplate.html','scripts/register/RegisterController'],function (require) {
@@ -184,6 +190,7 @@ define('scripts/register/RegisterDirective',['require','text!scripts/register/Re
 
     function Directive() {
         return {
+            replace:true,
             scope: {
                 email: '=',
                 password: '=',
@@ -200,48 +207,39 @@ define('scripts/register/RegisterDirective',['require','text!scripts/register/Re
 
     return Directive;
 });
-define('scripts/register/RegisterModule',['require','angular','scripts/register/RegisterDirective','scripts/util/ResponseFormatter'],function (require) {
+define('scripts/register/RegisterModule',['require','angular','scripts/register/RegisterDirective','scripts/util/ResponseFormatter','scripts/util/RedirectUtil'],function (require) {
     
 
     var angular = require('angular');
     var module = angular.module('amRegisterModule', [])
         .directive('amRegister', require('scripts/register/RegisterDirective'))
-        .value('responseFormatter', require('scripts/util/ResponseFormatter'));
+        .value('responseFormatter', require('scripts/util/ResponseFormatter'))
+        .service('redirectUtil', require('scripts/util/RedirectUtil'));
 
     return module;
 });
 
 
 
-define('text!scripts/forgot/ForgotTemplate.html',[],function () { return '<!-- START FORGOT PASSWORD FORM -->\n<div class="well span4">\n    <form ng-hide="text.success" id="forgot-form" class="" method="post" novalidate name="forgotForm" ng-submit="submit()">\n        <h1>Forgot Password</h1>\n        <hr/>\n        <!-- EMAIL -->\n        <label for="forgot-email">Email</label>\n        <input id="forgot-email"\n               ng-model="email"\n               name="email"\n               type="email"\n               class="email"\n               placeholder="@email"\n               ng-disabled="loading"\n               ng-required="true"\n                />\n\n        <div class="alert alert-error" ng-show="forgotForm.email.$invalid && forgotForm.email.$dirty && forgotForm.email.$error.required">\n            <strong>Invalid Email!</strong><br/>You must provide an email\n        </div>\n\n        <button id="forgot-submit" type="submit" class="btn btn-primary" ng-disabled="loading || forgotForm.$invalid">\n            {{text.submit}}\n        </button>\n        <div class="clear-fix"></div>\n        <div class="alert alert-error" ng-show="text.error">\n            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}\n        </div>\n        <hr/>\n        <a href="" ng-click="register()" ng-show="registerRedirect">Create an Account</a>\n        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>\n    </form>\n\n    <div class="alert alert-success" ng-show="text.success">\n        <strong>{{text.success.title}}</strong><br/>{{text.success.description}}<br/>\n        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>\n    </div>\n\n</div>\n<!-- END FORGOT PASSWORD FORM -->';});
+define('text!scripts/forgot/ForgotTemplate.html',[],function () { return '<div class="well span4">\n    <!-- START FORGOT PASSWORD FORM -->\n    <form ng-hide="text.success" id="forgot-form" class="" method="post" novalidate name="forgotForm" ng-submit="submit()">\n        <h1>Forgot Password</h1>\n        <hr/>\n        <!-- EMAIL -->\n        <label for="forgot-email">Email</label>\n        <input id="forgot-email"\n               ng-model="email"\n               name="email"\n               type="email"\n               class="email"\n               placeholder="@email"\n               ng-disabled="loading"\n               ng-required="true"\n                />\n\n        <div class="alert alert-error" ng-show="forgotForm.email.$invalid && forgotForm.email.$dirty && forgotForm.email.$error.required">\n            <strong>Invalid Email!</strong><br/>You must provide an email\n        </div>\n        <div class="clear-fix"></div>\n        <button id="forgot-submit" type="submit" class="btn btn-primary" ng-disabled="loading || forgotForm.$invalid">\n            {{text.submit}}\n        </button>\n        <div class="clear-fix"></div>\n        <div class="alert alert-error" ng-show="text.error">\n            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}\n        </div>\n        <hr/>\n        <a href="" ng-click="register()" ng-show="registerRedirect">Create an Account</a>\n        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>\n    </form>\n\n    <div class="alert alert-success" ng-show="text.success">\n        <strong>{{text.success.title}}</strong><br/>{{text.success.description}}<br/>\n        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>\n    </div>\n    <!-- END FORGOT PASSWORD FORM -->\n</div>';});
 
 define('scripts/forgot/ForgotController',[],function () {
     
 
-    function Controller($scope, $http, $location, responseFormatter) {
+    function Controller($scope, $http, responseFormatter, redirectUtil) {
         $scope.loading = false;
         $scope.text = {
             submit: 'Submit'
         };
 
-        if ($location.search().hasOwnProperty('email')) {
-            $scope.email = $location.search().email;
-        }
-
-        $scope.register = function () {
-            $location.hash($scope.registerRedirect);
-        };
-
-        $scope.login = function () {
-            $location.hash($scope.loginRedirect);
-        };
+        redirectUtil.init($scope);
 
         $scope.submit = function () {
             $scope.text.error = null;
             $scope.text.success = null;
             $scope.text.submit = 'Loading...';
             $scope.loading = true;
-            $http.post($scope.endpoint, {email: $scope.email, password: $scope.password})
+            $http.post($scope.endpoint, {email: $scope.email})
                 .success(function (data) {
                     $scope.text.success = $scope.successFormatter && $scope.successFormatter(data) || responseFormatter.formatSuccess(data);
                 })
@@ -253,7 +251,7 @@ define('scripts/forgot/ForgotController',[],function () {
         };
     }
 
-    Controller.$inject = [ '$scope', '$http', '$location', 'responseFormatter'];
+    Controller.$inject = [ '$scope', '$http', 'responseFormatter', 'redirectUtil'];
     return Controller;
 });
 
@@ -264,9 +262,9 @@ define('scripts/forgot/ForgotDirective',['require','text!scripts/forgot/ForgotTe
 
     function Directive() {
         return {
+            replace:true,
             scope: {
                 email: '=',
-                successRedirect: '@',
                 loginRedirect: '@',
                 registerRedirect: '@',
                 endpoint: '@',
@@ -283,20 +281,21 @@ define('scripts/forgot/ForgotDirective',['require','text!scripts/forgot/ForgotTe
 
 
 
-define('scripts/forgot/ForgotModule',['require','angular','scripts/forgot/ForgotDirective','scripts/util/ResponseFormatter'],function (require) {
+define('scripts/forgot/ForgotModule',['require','angular','scripts/forgot/ForgotDirective','scripts/util/ResponseFormatter','scripts/util/RedirectUtil'],function (require) {
     
 
     var angular = require('angular');
     var module = angular.module('amForgotModule', [])
         .directive('amForgot', require('scripts/forgot/ForgotDirective'))
-        .value('responseFormatter', require('scripts/util/ResponseFormatter'));
+        .value('responseFormatter', require('scripts/util/ResponseFormatter'))
+        .service('redirectUtil', require('scripts/util/RedirectUtil'));
 
     return module;
 });
 
 
 
-define('text!scripts/panel/AuthPanelTemplate.html',[],function () { return '<!-- START AUTH FORM -->\n<div am-login\n     ng-show="$parent.login"\n     class="login-container"\n     email="email"\n     password="password"\n     success-redirect="{{loginSuccess}}"\n     forgot-redirect="{{forgotRedirect}}"\n     register-redirect="{{registerRedirect}}"\n     endpoint="{{loginEndpoint}}"\n     error-formatter="loginErrorFormatter(value)"\n        >\n</div>\n<div am-register\n     ng-show="$parent.register"\n     class="register-container"\n     email="email"\n     password="password"\n     success-redirect="{{registerSuccess}}"\n     forgot-redirect="{{forgotRedirect}}"\n     login-redirect="{{loginRedirect}}"\n     endpoint="{{registerEndpoint}}"\n     error-formatter="registerErrorFormatter(value)"\n        >\n</div>\n\n<div am-forgot\n     ng-show="$parent.forgot"\n     class="forgot-container"\n     email="email"\n     success-redirect="{{forgotSuccess}}"\n     register-redirect="{{registerRedirect}}"\n     login-redirect="{{loginRedirect}}"\n     endpoint="{{forgotEndpoint}}"\n     error-formatter="forgotErrorFormatter(value)"\n        >\n</div>\n\n<!-- END AUTH FORM -->';});
+define('text!scripts/panel/AuthPanelTemplate.html',[],function () { return '<div>\n    <!-- START AUTH FORM -->\n    <div am-login\n         ng-show="$parent.login"\n         class="login-container"\n         email="email"\n         password="password"\n         success-redirect="{{loginSuccess}}"\n         forgot-redirect="{{forgotRedirect}}"\n         register-redirect="{{registerRedirect}}"\n         endpoint="{{loginEndpoint}}"\n         error-formatter="loginErrorFormatter(value)"\n            >\n    </div>\n    <div am-register\n         ng-show="$parent.register"\n         class="register-container"\n         email="email"\n         password="password"\n         success-redirect="{{registerSuccess}}"\n         forgot-redirect="{{forgotRedirect}}"\n         login-redirect="{{loginRedirect}}"\n         endpoint="{{registerEndpoint}}"\n         error-formatter="registerErrorFormatter(value)"\n            >\n    </div>\n\n    <div am-forgot\n         ng-show="$parent.forgot"\n         class="forgot-container"\n         email="email"\n         success-formatter="forgotSuccessFormatter(value)"\n         register-redirect="{{registerRedirect}}"\n         login-redirect="{{loginRedirect}}"\n         endpoint="{{forgotEndpoint}}"\n         error-formatter="forgotErrorFormatter(value)"\n            >\n    </div>\n    <!-- END AUTH FORM -->\n</div>';});
 
 define('scripts/panel/AuthPanelController',[],function () {
     
@@ -354,6 +353,7 @@ define('scripts/panel/AuthPanelDirective',['require','text!scripts/panel/AuthPan
 
     function Directive() {
         return {
+            replace:true,
             scope: {
                 email: '=',
                 password: '=',
@@ -370,7 +370,7 @@ define('scripts/panel/AuthPanelDirective',['require','text!scripts/panel/AuthPan
                 //Forgot
                 forgotRedirect: '@',
                 forgotEndpoint: '@',
-                forgotSuccess: '@',
+                forgotSuccessFormatter: '&',
                 forgotErrorFormatter: '&'
             },
             template: require('text!scripts/panel/AuthPanelTemplate.html'),
@@ -380,11 +380,18 @@ define('scripts/panel/AuthPanelDirective',['require','text!scripts/panel/AuthPan
 
     return Directive;
 });
-define('scripts/panel/AuthPanelModule',['require','angular','scripts/panel/AuthPanelDirective'],function (require) {
+define('scripts/panel/AuthPanelModule',['require','scripts/login/LoginModule','scripts/register/RegisterModule','scripts/forgot/ForgotModule','angular','scripts/panel/AuthPanelDirective'],function (require) {
     
 
+    require('scripts/login/LoginModule');
+    require('scripts/register/RegisterModule');
+    require('scripts/forgot/ForgotModule');
     var angular = require('angular');
-    var module = angular.module('amAuthPanelModule', [])
+    var module = angular.module('amAuthPanelModule', [
+            'amLoginModule',
+            'amForgotModule',
+            'amRegisterModule'
+        ])
         .directive('amAuthPanel', require('scripts/panel/AuthPanelDirective'));
 
     return module;
@@ -392,20 +399,14 @@ define('scripts/panel/AuthPanelModule',['require','angular','scripts/panel/AuthP
 
 
 
-define('am-authentication',['require','scripts/login/LoginModule','scripts/register/RegisterModule','scripts/forgot/ForgotModule','scripts/panel/AuthPanelModule','angular'],function (require) {
+define('am-authentication',['require','scripts/panel/AuthPanelModule','angular'],function (require) {
     
 
-    require('scripts/login/LoginModule');
-    require('scripts/register/RegisterModule');
-    require('scripts/forgot/ForgotModule');
     require('scripts/panel/AuthPanelModule');
 
     var angular = require('angular');
     angular.module('am.authentication', [
-        'amAuthPanelModule',
-        'amLoginModule',
-        'amForgotModule',
-        'amRegisterModule'
+        'amAuthPanelModule'
     ]);
 });
 

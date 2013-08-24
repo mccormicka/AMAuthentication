@@ -5,7 +5,8 @@ define(function (require) {
     var Test = require('scripts/login/LoginController');
 
     var errorFormatter = require('scripts/util/ResponseFormatter');
-
+    var RedirectUtil = require('scripts/util/RedirectUtil');
+    
     describe('LoginController Tests', function () {
 
         var $http;
@@ -13,6 +14,7 @@ define(function (require) {
         var $window;
         var $location;
         var scope;
+        var redirectUtil;
 
         beforeEach(inject(function ($rootScope, $injector) {
             scope = $rootScope.$new();
@@ -30,44 +32,14 @@ define(function (require) {
                     href: ''
                 }
             };
+            redirectUtil = new RedirectUtil($location);
 
         }));
 
         describe('SHOULD', function () {
-            it('parse an email address if found in the url', function () {
-                spyOn($location, 'search').andCallFake(function () {
-                    return {email: 'test@test.com'};
-                });
-                var controller = new Test(scope, $http, $location, $window, errorFormatter);
-                expect(controller).toBeDefined();
-                expect(scope.email).toBe('test@test.com');
-                expect($location.search).toHaveBeenCalled();
-            });
-
-            it('When calling register should update the hash', function () {
-
-                spyOn($location, 'hash').andCallFake(function (value) {
-                    expect(value).toBe('register');
-                });
-                var controller = new Test(scope, $http, $location, $window, errorFormatter);
-                expect(controller).toBeDefined();
-                scope.register();
-                expect($location.hash).toHaveBeenCalled();
-            });
-
-            it('When calling forgot should update the hash', function () {
-
-                spyOn($location, 'hash').andCallFake(function (value) {
-                    expect(value).toBe('forgot');
-                });
-                var controller = new Test(scope, $http, $location, $window, errorFormatter);
-                expect(controller).toBeDefined();
-                scope.forgot();
-                expect($location.hash).toHaveBeenCalled();
-            });
 
             it('Post username and password to the server on submit', function () {
-                var controller = new Test(scope, $http, $location, $window, errorFormatter);
+                var controller = new Test(scope, $http, $window, errorFormatter, redirectUtil);
                 expect(controller).toBeDefined();
                 $httpBackend.expectPOST('/login', {email: 'test@test.com', password: 'testing'}).respond(200);
                 scope.submit();
@@ -76,7 +48,7 @@ define(function (require) {
             });
 
             it('Set scope error when an invalid username and password are sent to the server on submit', function () {
-                var controller = new Test(scope, $http, $location, $window, errorFormatter);
+                var controller = new Test(scope, $http, $window, errorFormatter, redirectUtil);
                 expect(controller).toBeDefined();
                 $httpBackend.expectPOST('/login', {email: 'test@test.com', password: 'testing'}).respond(403);
                 scope.submit();
@@ -89,25 +61,11 @@ define(function (require) {
             });
 
             it('Set scope error when an invalid username and password are sent to the server on submit', function () {
-                var controller = new Test(scope, $http, $location, $window, errorFormatter);
+                var controller = new Test(scope, $http, $window, errorFormatter, redirectUtil);
                 expect(controller).toBeDefined();
                 $httpBackend.expectPOST('/login', {email: 'test@test.com', password: 'testing'}).respond(400,{
-                    'data': [
-                        {
-                            'reason': 'incorrect',
-                            'field': 'email'
-                        },
-                        {
-                            'reason': 'incorrect',
-                            'field': 'password'
-                        }
-                    ],
                     'title': 'api.error.invalid.params',
-                    'code': 40002,
-                    'status': 400,
-                    'description': 'Invalid Parameters were supplied with the request',
-                    'href': '/apierrors/40002',
-                    'type': 'apierror'
+                    'description': 'Invalid Parameters were supplied with the request'
                 });
                 scope.submit();
                 $httpBackend.flush();
@@ -116,7 +74,7 @@ define(function (require) {
             });
 
             it('Set error text on a 404', function () {
-                var controller = new Test(scope, $http, $location, $window, errorFormatter);
+                var controller = new Test(scope, $http, $window, errorFormatter, redirectUtil);
                 expect(controller).toBeDefined();
                 $httpBackend.expectPOST('/login', {email: 'test@test.com', password: 'testing'}).respond(404);
                 scope.submit();
@@ -136,7 +94,7 @@ define(function (require) {
                     };
                 };
 
-                var controller = new Test(scope, $http, $location, $window, errorFormatter);
+                var controller = new Test(scope, $http, $window, errorFormatter, redirectUtil);
                 expect(controller).toBeDefined();
                 $httpBackend.expectPOST('/login', {email: 'test@test.com', password: 'testing'}).respond(404);
                 scope.submit();

@@ -3,9 +3,9 @@ define(function (require) {
 
     function Directive() {
         return {
+            replace:true,
             scope: {
                 email: '=',
-                successRedirect: '@',
                 loginRedirect: '@',
                 registerRedirect: '@',
                 endpoint: '@',

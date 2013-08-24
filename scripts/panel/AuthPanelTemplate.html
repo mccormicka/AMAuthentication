@@ -1,39 +1,40 @@
-<!-- START AUTH FORM -->
-<div am-login
-     ng-show="$parent.login"
-     class="login-container"
-     email="email"
-     password="password"
-     success-redirect="{{loginSuccess}}"
-     forgot-redirect="{{forgotRedirect}}"
-     register-redirect="{{registerRedirect}}"
-     endpoint="{{loginEndpoint}}"
-     error-formatter="loginErrorFormatter(value)"
-        >
-</div>
-<div am-register
-     ng-show="$parent.register"
-     class="register-container"
-     email="email"
-     password="password"
-     success-redirect="{{registerSuccess}}"
-     forgot-redirect="{{forgotRedirect}}"
-     login-redirect="{{loginRedirect}}"
-     endpoint="{{registerEndpoint}}"
-     error-formatter="registerErrorFormatter(value)"
-        >
-</div>
+<div>
+    <!-- START AUTH FORM -->
+    <div am-login
+         ng-show="$parent.login"
+         class="login-container"
+         email="email"
+         password="password"
+         success-redirect="{{loginSuccess}}"
+         forgot-redirect="{{forgotRedirect}}"
+         register-redirect="{{registerRedirect}}"
+         endpoint="{{loginEndpoint}}"
+         error-formatter="loginErrorFormatter(value)"
+            >
+    </div>
+    <div am-register
+         ng-show="$parent.register"
+         class="register-container"
+         email="email"
+         password="password"
+         success-redirect="{{registerSuccess}}"
+         forgot-redirect="{{forgotRedirect}}"
+         login-redirect="{{loginRedirect}}"
+         endpoint="{{registerEndpoint}}"
+         error-formatter="registerErrorFormatter(value)"
+            >
+    </div>
 
-<div am-forgot
-     ng-show="$parent.forgot"
-     class="forgot-container"
-     email="email"
-     success-redirect="{{forgotSuccess}}"
-     register-redirect="{{registerRedirect}}"
-     login-redirect="{{loginRedirect}}"
-     endpoint="{{forgotEndpoint}}"
-     error-formatter="forgotErrorFormatter(value)"
-        >
+    <div am-forgot
+         ng-show="$parent.forgot"
+         class="forgot-container"
+         email="email"
+         success-formatter="forgotSuccessFormatter(value)"
+         register-redirect="{{registerRedirect}}"
+         login-redirect="{{loginRedirect}}"
+         endpoint="{{forgotEndpoint}}"
+         error-formatter="forgotErrorFormatter(value)"
+            >
+    </div>
+    <!-- END AUTH FORM -->
 </div>
-
-<!-- END AUTH FORM -->

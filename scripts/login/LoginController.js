@@ -1,23 +1,12 @@
 define(function () {
     'use strict';
 
-    function Controller($scope, $http, $location, $window, responseFormatter) {
+    function Controller($scope, $http, $window, responseFormatter, redirectUtil) {
         $scope.loading = false;
         $scope.text = {
             submit: 'Submit'
         };
-
-        if ($location.search().hasOwnProperty('email')) {
-            $scope.email = $location.search().email;
-        }
-
-        $scope.register = function () {
-            $location.hash($scope.registerRedirect);
-        };
-
-        $scope.forgot = function () {
-            $location.hash($scope.forgotRedirect);
-        };
+        redirectUtil.init($scope);
 
         $scope.submit = function () {
             $scope.text.error = null;
@@ -40,8 +29,6 @@ define(function () {
         };
     }
 
-    Controller.$inject = [ '$scope', '$http', '$location', '$window', 'responseFormatter'];
+    Controller.$inject = [ '$scope', '$http', '$window', 'responseFormatter', 'redirectUtil'];
     return Controller;
 });
-
-

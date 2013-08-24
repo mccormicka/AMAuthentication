@@ -1,5 +1,5 @@
-<!-- START REGISTRATION FORM -->
 <div class="well span4">
+    <!-- START REGISTRATION FORM -->
     <form id="register-form" class="" method="post" novalidate name="registerForm" ng-submit="submit()">
         <h1>Register</h1>
         <hr/>
@@ -38,7 +38,7 @@
         <div class="alert alert-error" ng-show="registerForm.password.$invalid && registerForm.password.$dirty && registerForm.password.$error.required">
             <strong>Invalid Password!</strong><br/>You must provide a password
         </div>
-
+        <div class="clear-fix"></div>
         <button id="register-submit" type="submit" class="btn btn-primary" ng-disabled="loading || registerForm.$invalid">
             {{text.submit}}
         </button>
@@ -50,5 +50,5 @@
         <a href="" ng-click="forgot()" ng-show="forgotRedirect" id="register-forgot-password">Forgot Your Password?</a>
         <a href="" ng-click="login()" ng-show="loginRedirect" id="register-create-account">Sign In</a>
     </form>
+    <!-- END REGISTRATION FORM -->
 </div>
-<!-- END REGISTRATION FORM -->
