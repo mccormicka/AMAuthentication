@@ -29,11 +29,23 @@
          ng-show="$parent.forgot"
          class="forgot-container"
          email="email"
+         forgot-redirect="{{forgotRedirect}}"
          success-formatter="forgotSuccessFormatter(value)"
          register-redirect="{{registerRedirect}}"
          login-redirect="{{loginRedirect}}"
          endpoint="{{forgotEndpoint}}"
          error-formatter="forgotErrorFormatter(value)"
+            >
+    </div>
+
+    <div am-reset
+         ng-show="$parent.reset"
+         class="reset-container"
+         success-redirect="{{resetSuccess}}"
+         register-redirect="{{registerRedirect}}"
+         login-redirect="{{loginRedirect}}"
+         endpoint="{{resetEndpoint}}"
+         error-formatter="resetErrorFormatter(value)"
             >
     </div>
     <!-- END AUTH FORM -->

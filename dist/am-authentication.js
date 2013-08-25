@@ -108,11 +108,37 @@ define('scripts/util/ResponseFormatter',[],function () {
 define('scripts/util/RedirectUtil',[],function () {
     
 
-    function RedirectUtil($location){
-        this.init = function($scope){
-            if ($location.search().hasOwnProperty('email')) {
-                $scope.email = $location.search().email;
+    function RedirectUtil($location) {
+        this.init = function ($scope) {
+
+            /**
+             * Update scope variables if the search params change.
+             */
+            $scope.$watch(function () {
+                return $location.search();
+            }, function () {
+                resetText();
+                if ($location.search().hasOwnProperty('email')) {
+                    $scope.email = $location.search().email;
+                }
+                if ($location.search().hasOwnProperty('token')) {
+                    $scope.token = $location.search().token;
+                }
+            });
+
+            function resetText() {
+                $scope.text.success = null;
+                $scope.text.error = null;
             }
+
+            /**
+             * Reset view success/error messages if the hash changes.
+             */
+            $scope.$watch(function () {
+                return $location.hash();
+            }, function () {
+                resetText();
+            });
 
             $scope.register = function () {
                 $location.hash($scope.registerRedirect);
@@ -127,6 +153,7 @@ define('scripts/util/RedirectUtil',[],function () {
             };
         };
     }
+
     RedirectUtil.$inject = ['$location'];
     return RedirectUtil;
 });
@@ -231,7 +258,6 @@ define('scripts/forgot/ForgotController',[],function () {
         $scope.text = {
             submit: 'Submit'
         };
-
         redirectUtil.init($scope);
 
         $scope.submit = function () {
@@ -241,6 +267,8 @@ define('scripts/forgot/ForgotController',[],function () {
             $scope.loading = true;
             $http.post($scope.endpoint, {email: $scope.email})
                 .success(function (data) {
+                    $scope.text.submit = 'Submit';
+                    $scope.loading = false;
                     $scope.text.success = $scope.successFormatter && $scope.successFormatter(data) || responseFormatter.formatSuccess(data);
                 })
                 .error(function (data) {
@@ -266,6 +294,7 @@ define('scripts/forgot/ForgotDirective',['require','text!scripts/forgot/ForgotTe
             scope: {
                 email: '=',
                 loginRedirect: '@',
+                forgotRedirect: '@',
                 registerRedirect: '@',
                 endpoint: '@',
                 errorFormatter:'&',
@@ -295,7 +324,81 @@ define('scripts/forgot/ForgotModule',['require','angular','scripts/forgot/Forgot
 
 
 
-define('text!scripts/panel/AuthPanelTemplate.html',[],function () { return '<div>\n    <!-- START AUTH FORM -->\n    <div am-login\n         ng-show="$parent.login"\n         class="login-container"\n         email="email"\n         password="password"\n         success-redirect="{{loginSuccess}}"\n         forgot-redirect="{{forgotRedirect}}"\n         register-redirect="{{registerRedirect}}"\n         endpoint="{{loginEndpoint}}"\n         error-formatter="loginErrorFormatter(value)"\n            >\n    </div>\n    <div am-register\n         ng-show="$parent.register"\n         class="register-container"\n         email="email"\n         password="password"\n         success-redirect="{{registerSuccess}}"\n         forgot-redirect="{{forgotRedirect}}"\n         login-redirect="{{loginRedirect}}"\n         endpoint="{{registerEndpoint}}"\n         error-formatter="registerErrorFormatter(value)"\n            >\n    </div>\n\n    <div am-forgot\n         ng-show="$parent.forgot"\n         class="forgot-container"\n         email="email"\n         success-formatter="forgotSuccessFormatter(value)"\n         register-redirect="{{registerRedirect}}"\n         login-redirect="{{loginRedirect}}"\n         endpoint="{{forgotEndpoint}}"\n         error-formatter="forgotErrorFormatter(value)"\n            >\n    </div>\n    <!-- END AUTH FORM -->\n</div>';});
+define('text!scripts/reset/ResetTemplate.html',[],function () { return '<div class="well span4">\n    <!-- START RESET PASSWORD FORM -->\n    <form ng-hide="text.success" id="reset-form" class="" method="post" novalidate name="resetForm" ng-submit="submit()">\n        <h1>Change Password</h1>\n        <hr/>\n        <!-- PASSWORD -->\n\n        <label for="reset-password">Password</label>\n        <input id="reset-password"\n               ng-model="password"\n               type="password"\n               name="password"\n               class="pass"\n               placeholder="Password"\n               ng-minlength="6"\n               ng-disabled="loading"\n               ng-required="true"\n                >\n\n        <div class="alert alert-error"\n             ng-show="resetForm.password.$invalid && resetForm.password.$dirty && resetForm.password.$error.minlength">\n            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long\n        </div>\n        <div class="alert alert-error"\n             ng-show="resetForm.password.$invalid && resetForm.password.$dirty && resetForm.password.$error.required">\n            <strong>Invalid Password!</strong><br/>You must provide a password\n        </div>\n        <div class="clear-fix"></div>\n        <button id="reset-submit" type="submit" class="btn btn-primary" ng-disabled="loading || resetForm.$invalid">\n            {{text.submit}}\n        </button>\n        <div class="clear-fix"></div>\n        <div class="alert alert-error" ng-show="text.error">\n            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}\n        </div>\n        <hr/>\n        <a href="" ng-click="register()" ng-show="registerRedirect">Create an Account</a>\n        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>\n    </form>\n\n    <div class="alert alert-success" ng-show="text.success">\n        <strong>{{text.success.title}}</strong><br/>{{text.success.description}}<br/>\n        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>\n    </div>\n    <!-- END RESET PASSWORD FORM -->\n</div>';});
+
+define('scripts/reset/ResetController',[],function () {
+    
+
+    function Controller($scope, $http, $window, responseFormatter, redirectUtil) {
+        $scope.loading = false;
+        $scope.text = {
+            submit: 'Submit'
+        };
+
+        redirectUtil.init($scope);
+
+        $scope.submit = function () {
+            $scope.text.error = null;
+            $scope.text.success = null;
+            $scope.text.submit = 'Loading...';
+            $scope.loading = true;
+            $http.post($scope.endpoint, {email:$scope.email, password: $scope.password, token:$scope.token})
+                .success(function (data) {
+                    $scope.text.submit = 'Submit';
+                    $scope.loading = false;
+                    if($scope.successRedirect){
+                        $window.location.href = $scope.successRedirect;
+                    }else{
+                        $scope.text.success = $scope.successFormatter && $scope.successFormatter(data) || responseFormatter.formatSuccess(data);
+                    }
+                })
+                .error(function (data) {
+                    $scope.text.submit = 'Submit';
+                    $scope.loading = false;
+                    $scope.text.error = $scope.errorFormatter && $scope.errorFormatter(data) || responseFormatter.formatError(data);
+                });
+        };
+    }
+
+    Controller.$inject = [ '$scope', '$http', '$window', 'responseFormatter', 'redirectUtil'];
+    return Controller;
+});
+
+define('scripts/reset/ResetDirective',['require','text!scripts/reset/ResetTemplate.html','scripts/reset/ResetController'],function (require) {
+    
+
+    function Directive() {
+        return {
+            replace:true,
+            scope: {
+                loginRedirect: '@',
+                registerRedirect: '@',
+                endpoint: '@',
+                errorFormatter:'&',
+                successFormatter:'&',
+                successRedirect:'@'
+            },
+            template: require('text!scripts/reset/ResetTemplate.html'),
+            controller: require('scripts/reset/ResetController')
+        };
+    }
+
+    return Directive;
+});
+
+define('scripts/reset/ResetModule',['require','angular','scripts/reset/ResetDirective','scripts/util/ResponseFormatter','scripts/util/RedirectUtil'],function (require) {
+    
+
+    var angular = require('angular');
+    var module = angular.module('amResetModule', [])
+        .directive('amReset', require('scripts/reset/ResetDirective'))
+        .value('responseFormatter', require('scripts/util/ResponseFormatter'))
+        .service('redirectUtil', require('scripts/util/RedirectUtil'));
+
+    return module;
+});
+
+define('text!scripts/panel/AuthPanelTemplate.html',[],function () { return '<div>\n    <!-- START AUTH FORM -->\n    <div am-login\n         ng-show="$parent.login"\n         class="login-container"\n         email="email"\n         password="password"\n         success-redirect="{{loginSuccess}}"\n         forgot-redirect="{{forgotRedirect}}"\n         register-redirect="{{registerRedirect}}"\n         endpoint="{{loginEndpoint}}"\n         error-formatter="loginErrorFormatter(value)"\n            >\n    </div>\n    <div am-register\n         ng-show="$parent.register"\n         class="register-container"\n         email="email"\n         password="password"\n         success-redirect="{{registerSuccess}}"\n         forgot-redirect="{{forgotRedirect}}"\n         login-redirect="{{loginRedirect}}"\n         endpoint="{{registerEndpoint}}"\n         error-formatter="registerErrorFormatter(value)"\n            >\n    </div>\n\n    <div am-forgot\n         ng-show="$parent.forgot"\n         class="forgot-container"\n         email="email"\n         forgot-redirect="{{forgotRedirect}}"\n         success-formatter="forgotSuccessFormatter(value)"\n         register-redirect="{{registerRedirect}}"\n         login-redirect="{{loginRedirect}}"\n         endpoint="{{forgotEndpoint}}"\n         error-formatter="forgotErrorFormatter(value)"\n            >\n    </div>\n\n    <div am-reset\n         ng-show="$parent.reset"\n         class="reset-container"\n         success-redirect="{{resetSuccess}}"\n         register-redirect="{{registerRedirect}}"\n         login-redirect="{{loginRedirect}}"\n         endpoint="{{resetEndpoint}}"\n         error-formatter="resetErrorFormatter(value)"\n            >\n    </div>\n    <!-- END AUTH FORM -->\n</div>';});
 
 define('scripts/panel/AuthPanelController',[],function () {
     
@@ -305,6 +408,8 @@ define('scripts/panel/AuthPanelController',[],function () {
         //Set the login screen as the default view.
         $scope.login = true;
         $scope.register = false;
+        $scope.forgot = false;
+        $scope.reset = false;
 
         /**
          * Update the view whenever the hash changes and matches one of our views.
@@ -312,6 +417,18 @@ define('scripts/panel/AuthPanelController',[],function () {
         $scope.$watch(function () {
             return $location.hash();
         }, updateView);
+
+        /**
+         * Emails garbles hashes so we need to provide a mechanism to update
+         * the view with search params also.
+         */
+        $scope.$watch(function(){
+            return $location.search();
+        }, function(value){
+            if(value[$scope.searchParam]){
+                updateView(value[$scope.searchParam]);
+            }
+        });
 
         //-------------------------------------------------------------------------
         //
@@ -321,7 +438,7 @@ define('scripts/panel/AuthPanelController',[],function () {
 
         function resetViews() {
             //Reset all views to false
-            $scope.login = $scope.register = $scope.forgot = false;
+            $scope.login = $scope.register = $scope.forgot = $scope.reset  = false;
         }
 
         function updateView(newValue) {
@@ -338,6 +455,10 @@ define('scripts/panel/AuthPanelController',[],function () {
                 resetViews();
                 $scope.forgot = true;
                 break;
+            case $scope.resetRedirect:
+                resetViews();
+                $scope.reset = true;
+                break;
             }
         }
     }
@@ -345,15 +466,12 @@ define('scripts/panel/AuthPanelController',[],function () {
     Controller.$inject = ['$scope', '$location'];
     return Controller;
 });
-
-
-
 define('scripts/panel/AuthPanelDirective',['require','text!scripts/panel/AuthPanelTemplate.html','scripts/panel/AuthPanelController'],function (require) {
     
 
     function Directive() {
         return {
-            replace:true,
+            replace: true,
             scope: {
                 email: '=',
                 password: '=',
@@ -371,26 +489,42 @@ define('scripts/panel/AuthPanelDirective',['require','text!scripts/panel/AuthPan
                 forgotRedirect: '@',
                 forgotEndpoint: '@',
                 forgotSuccessFormatter: '&',
-                forgotErrorFormatter: '&'
+                forgotErrorFormatter: '&',
+                //Reset
+                resetRedirect: '@',
+                resetEndpoint: '@',
+                resetSuccess: '@',
+                resetErrorFormatter: '&',
+
+                searchParam: '@'
             },
             template: require('text!scripts/panel/AuthPanelTemplate.html'),
-            controller: require('scripts/panel/AuthPanelController')
+            controller: require('scripts/panel/AuthPanelController'),
+            link: function ($scope, iElement, $attrs) {
+                //Setup a default value if none specified
+                $attrs.$observe('searchParam', function (val) {
+                    $scope.searchParam = val ? val : 'amauth';
+                });
+            }
         };
     }
 
     return Directive;
 });
-define('scripts/panel/AuthPanelModule',['require','scripts/login/LoginModule','scripts/register/RegisterModule','scripts/forgot/ForgotModule','angular','scripts/panel/AuthPanelDirective'],function (require) {
+define('scripts/panel/AuthPanelModule',['require','scripts/login/LoginModule','scripts/register/RegisterModule','scripts/forgot/ForgotModule','scripts/reset/ResetModule','angular','scripts/panel/AuthPanelDirective'],function (require) {
     
 
     require('scripts/login/LoginModule');
     require('scripts/register/RegisterModule');
     require('scripts/forgot/ForgotModule');
+    require('scripts/reset/ResetModule');
+
     var angular = require('angular');
     var module = angular.module('amAuthPanelModule', [
             'amLoginModule',
             'amForgotModule',
-            'amRegisterModule'
+            'amRegisterModule',
+            'amResetModule'
         ])
         .directive('amAuthPanel', require('scripts/panel/AuthPanelDirective'));
 

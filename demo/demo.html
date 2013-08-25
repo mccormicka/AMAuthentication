@@ -4,7 +4,11 @@
 </head>
 <html>
 <body ng-controller="demoCtrl">
-
+<button ng-click="resetPassword()">Reset Password</button>
+<label>Register: email:register@register.com pass:registering</label>
+<label>Login: email:login@login.com pass: loggingin</label>
+<label>Forgot: email:forgot@forgot.com</label>
+<label>Reset: email:reset@reset.com pass:resetting token:12345</label>
 <div am-auth-panel
      class="login-container"
      email="email"
@@ -25,12 +29,17 @@
      forgot-success="forgotSuccess"
      forgot-error-formatter="errorFormatter(value)"
      forgot-success-formatter="errorFormatter(value)"
+
+     reset-redirect="reset"
+     reset-endpoint="/reset"
+     reset-success-formatter="resetSuccessFormatter(value)"
+     reset-error-formatter="errorFormatter(value)"
         >
 </div>
 
 <script src="../components/angular/angular.min.js"></script>
 <script src="../require.config.js"></script>
-<script data-main="tests/demo.js" src="../components/requirejs/require.js"></script>
+<script data-main="demo/demo.js" src="../components/requirejs/require.js"></script>
 
 </body>
 </html>

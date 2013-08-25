@@ -9,6 +9,7 @@ define(function (require) {
         var $location;
         var scope;
         var hash;
+        var search = {};
 
         beforeEach(inject(function ($rootScope) {
             scope = $rootScope.$new();
@@ -22,12 +23,20 @@ define(function (require) {
             scope.registerSuccess = 'registerSuccess';
             //forgot
             scope.forgotRedirect = 'forgotRedirect';
-            scope.forgotEndpoint = 'forgotRedirect';
+            scope.forgotEndpoint = 'forgotEndpoint';
+            //Reset
+            scope.resetRedirect = 'resetRedirect';
+            scope.resetEndpoint = 'resetEndpoint';
+            scope.searchParam = 'amauth';
 
             hash = '';
+            search = {};
             $location = {
                 hash: function(){
                     return hash;
+                },
+                search: function(){
+                    return search;
                 }
             };
 
@@ -38,7 +47,10 @@ define(function (require) {
             it('Show the login by default', function () {
                 var controller = new Test(scope, $location);
                 expect(controller).toBeDefined();
+                expect(scope.reset).toBe(false);
                 expect(scope.login).toBe(true);
+                expect(scope.forgot).toBe(false);
+                expect(scope.register).toBe(false);
             });
 
             it('Update the active view when the hash changes to register', function () {
@@ -47,7 +59,9 @@ define(function (require) {
                 expect(scope.login).toBe(true);
                 hash = scope.registerRedirect;
                 scope.$digest();
+                expect(scope.reset).toBe(false);
                 expect(scope.login).toBe(false);
+                expect(scope.forgot).toBe(false);
                 expect(scope.register).toBe(true);
             });
 
@@ -60,7 +74,10 @@ define(function (require) {
                 expect(scope.register).toBe(true);
                 hash = scope.loginRedirect;
                 scope.$digest();
+                expect(scope.reset).toBe(false);
                 expect(scope.login).toBe(true);
+                expect(scope.forgot).toBe(false);
+                expect(scope.register).toBe(false);
             });
 
             it('Update the active view when the hash changes to forgot', function () {
@@ -70,17 +87,44 @@ define(function (require) {
                 expect(scope.login).toBe(true);
                 hash = scope.forgotRedirect;
                 scope.$digest();
+                expect(scope.reset).toBe(false);
+                expect(scope.login).toBe(false);
                 expect(scope.forgot).toBe(true);
+                expect(scope.register).toBe(false);
             });
 
-            xit('Update the active view when the hash changes to reset', function () {
-                expect(false).toBeTruthy();
+            it('Update the active view when the hash changes to reset', function () {
+                var controller = new Test(scope, $location);
+                scope.$digest();
+                expect(controller).toBeDefined();
+                expect(scope.login).toBe(true);
+                hash = scope.resetRedirect;
+                scope.$digest();
+                expect(scope.reset).toBe(true);
+                expect(scope.login).toBe(false);
+                expect(scope.forgot).toBe(false);
+                expect(scope.register).toBe(false);
             });
+
+            it('Update the active view when the search changes to reset', function () {
+                var controller = new Test(scope, $location);
+                scope.$digest();
+                expect(controller).toBeDefined();
+                expect(scope.login).toBe(true);
+                search = {amauth:scope.resetRedirect};
+                scope.$digest();
+                expect(scope.reset).toBe(true);
+                expect(scope.login).toBe(false);
+                expect(scope.forgot).toBe(false);
+                expect(scope.register).toBe(false);
+            });
+
+
 
         });
 
         describe('SHOULD NOT', function () {
-            it('Update the active view when the hash changes to an unknow hash', function () {
+            it('Update the active view when the hash changes to an unknown hash', function () {
                 var controller = new Test(scope, $location);
                 expect(controller).toBeDefined();
                 expect(scope.login).toBe(true);

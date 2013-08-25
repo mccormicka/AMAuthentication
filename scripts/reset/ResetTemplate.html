@@ -1,0 +1,46 @@
+<div class="well span4">
+    <!-- START RESET PASSWORD FORM -->
+    <form ng-hide="text.success" id="reset-form" class="" method="post" novalidate name="resetForm" ng-submit="submit()">
+        <h1>Change Password</h1>
+        <hr/>
+        <!-- PASSWORD -->
+
+        <label for="reset-password">Password</label>
+        <input id="reset-password"
+               ng-model="password"
+               type="password"
+               name="password"
+               class="pass"
+               placeholder="Password"
+               ng-minlength="6"
+               ng-disabled="loading"
+               ng-required="true"
+                >
+
+        <div class="alert alert-error"
+             ng-show="resetForm.password.$invalid && resetForm.password.$dirty && resetForm.password.$error.minlength">
+            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long
+        </div>
+        <div class="alert alert-error"
+             ng-show="resetForm.password.$invalid && resetForm.password.$dirty && resetForm.password.$error.required">
+            <strong>Invalid Password!</strong><br/>You must provide a password
+        </div>
+        <div class="clear-fix"></div>
+        <button id="reset-submit" type="submit" class="btn btn-primary" ng-disabled="loading || resetForm.$invalid">
+            {{text.submit}}
+        </button>
+        <div class="clear-fix"></div>
+        <div class="alert alert-error" ng-show="text.error">
+            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}
+        </div>
+        <hr/>
+        <a href="" ng-click="register()" ng-show="registerRedirect">Create an Account</a>
+        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>
+    </form>
+
+    <div class="alert alert-success" ng-show="text.success">
+        <strong>{{text.success.title}}</strong><br/>{{text.success.description}}<br/>
+        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>
+    </div>
+    <!-- END RESET PASSWORD FORM -->
+</div>

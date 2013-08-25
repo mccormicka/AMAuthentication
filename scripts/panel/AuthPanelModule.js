@@ -4,11 +4,14 @@ define(function (require) {
     require('scripts/login/LoginModule');
     require('scripts/register/RegisterModule');
     require('scripts/forgot/ForgotModule');
+    require('scripts/reset/ResetModule');
+
     var angular = require('angular');
     var module = angular.module('amAuthPanelModule', [
             'amLoginModule',
             'amForgotModule',
-            'amRegisterModule'
+            'amRegisterModule',
+            'amResetModule'
         ])
         .directive('amAuthPanel', require('scripts/panel/AuthPanelDirective'));
 

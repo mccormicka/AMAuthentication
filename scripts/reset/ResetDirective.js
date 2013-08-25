@@ -5,20 +5,17 @@ define(function (require) {
         return {
             replace:true,
             scope: {
-                email: '=',
                 loginRedirect: '@',
-                forgotRedirect: '@',
                 registerRedirect: '@',
                 endpoint: '@',
                 errorFormatter:'&',
-                successFormatter:'&'
+                successFormatter:'&',
+                successRedirect:'@'
             },
-            template: require('text!scripts/forgot/ForgotTemplate.html'),
-            controller: require('scripts/forgot/ForgotController')
+            template: require('text!scripts/reset/ResetTemplate.html'),
+            controller: require('scripts/reset/ResetController')
         };
     }
 
     return Directive;
 });
-
-

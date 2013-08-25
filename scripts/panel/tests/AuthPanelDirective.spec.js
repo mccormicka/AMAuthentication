@@ -24,7 +24,11 @@ define(function (require) {
             'forgot-redirect="forgot" ' +
             'forgot-endpoint="/forgot" ' +
             'forgot-error-formatter="errorFormatter(value)" ' +
-            'forgot-success-formatter="successFormatter(value)" > </div>';
+            'forgot-success-formatter="successFormatter(value)" ' +
+            'reset-redirect="reset" ' +
+            'reset-endpoint="/reset" ' +
+            'reset-success="forgotSuccess" ' +
+            'reset-error-formatter="errorFormatter(value)"> </div>';
 
         var scope;
         var directive;
@@ -50,6 +54,7 @@ define(function (require) {
             expect(directive.html()).toContain('login-form');
             expect(directive.html()).toContain('register-form');
             expect(directive.html()).toContain('forgot-form');
+            expect(directive.html()).toContain('reset-form');
         });
 
         it('Call Success Formatter when passed to forgot', function () {

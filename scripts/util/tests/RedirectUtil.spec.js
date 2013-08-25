@@ -17,6 +17,7 @@ define(function (require) {
             scope.forgotRedirect = 'forgot';
             scope.email = 'test@test.com';
             scope.password = 'testing';
+            scope.text = {};
             $location = $injector.get('$location');
             redirectUtil = new Test($location);
 
@@ -24,16 +25,21 @@ define(function (require) {
 
         describe('SHOULD', function () {
             it('parse an email address if found in the url', function () {
-                spyOn($location, 'search').andCallFake(function () {
-                    return {email: 'test@test.com'};
-                });
                 redirectUtil.init(scope);
-                expect(scope.email).toBe('test@test.com');
-                expect($location.search).toHaveBeenCalled();
+                $location.search({email: 'updated@updated.com'});
+                scope.$digest();
+                expect(scope.email).toBe('updated@updated.com');
+            });
+
+
+            it('parse a token if found in the url', function () {
+                redirectUtil.init(scope);
+                $location.search({token: '1234567'});
+                scope.$digest();
+                expect(scope.token).toBe('1234567');
             });
 
             it('When calling register should update the hash', function () {
-
                 spyOn($location, 'hash').andCallFake(function (value) {
                     expect(value).toBe('register');
                 });
@@ -43,7 +49,6 @@ define(function (require) {
             });
 
             it('When calling forgot should update the hash', function () {
-
                 spyOn($location, 'hash').andCallFake(function (value) {
                     expect(value).toBe('forgot');
                 });
@@ -53,7 +58,6 @@ define(function (require) {
             });
 
             it('When calling login should update the hash', function () {
-
                 spyOn($location, 'hash').andCallFake(function (value) {
                     expect(value).toBe('login');
                 });

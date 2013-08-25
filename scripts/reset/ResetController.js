@@ -1,11 +1,12 @@
 define(function () {
     'use strict';
 
-    function Controller($scope, $http, responseFormatter, redirectUtil) {
+    function Controller($scope, $http, $window, responseFormatter, redirectUtil) {
         $scope.loading = false;
         $scope.text = {
             submit: 'Submit'
         };
+
         redirectUtil.init($scope);
 
         $scope.submit = function () {
@@ -13,11 +14,15 @@ define(function () {
             $scope.text.success = null;
             $scope.text.submit = 'Loading...';
             $scope.loading = true;
-            $http.post($scope.endpoint, {email: $scope.email})
+            $http.post($scope.endpoint, {email:$scope.email, password: $scope.password, token:$scope.token})
                 .success(function (data) {
                     $scope.text.submit = 'Submit';
                     $scope.loading = false;
-                    $scope.text.success = $scope.successFormatter && $scope.successFormatter(data) || responseFormatter.formatSuccess(data);
+                    if($scope.successRedirect){
+                        $window.location.href = $scope.successRedirect;
+                    }else{
+                        $scope.text.success = $scope.successFormatter && $scope.successFormatter(data) || responseFormatter.formatSuccess(data);
+                    }
                 })
                 .error(function (data) {
                     $scope.text.submit = 'Submit';
@@ -27,8 +32,6 @@ define(function () {
         };
     }
 
-    Controller.$inject = [ '$scope', '$http', 'responseFormatter', 'redirectUtil'];
+    Controller.$inject = [ '$scope', '$http', '$window', 'responseFormatter', 'redirectUtil'];
     return Controller;
 });
-
-
