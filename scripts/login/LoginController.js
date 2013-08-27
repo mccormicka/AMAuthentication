@@ -20,7 +20,7 @@ define(function () {
 
                     $scope.text.submit = 'Submit';
                     $scope.loading = false;
-                    var message = $scope.errorFormatter && $scope.errorFormatter(data) || responseFormatter.formatError(data);
+                    var message = $scope.errorFormatter && $scope.errorFormatter({value:data}) || responseFormatter.formatError(data);
                     $scope.text.error = {
                         title: message.title,
                         description: message.description

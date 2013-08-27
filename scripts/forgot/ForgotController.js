@@ -17,12 +17,12 @@ define(function () {
                 .success(function (data) {
                     $scope.text.submit = 'Submit';
                     $scope.loading = false;
-                    $scope.text.success = $scope.successFormatter && $scope.successFormatter(data) || responseFormatter.formatSuccess(data);
+                    $scope.text.success = $scope.successFormatter && $scope.successFormatter({value:data}) || responseFormatter.formatSuccess(data);
                 })
                 .error(function (data) {
                     $scope.text.submit = 'Submit';
                     $scope.loading = false;
-                    $scope.text.error = $scope.errorFormatter && $scope.errorFormatter(data) || responseFormatter.formatError(data);
+                    $scope.text.error = $scope.errorFormatter && $scope.errorFormatter({value:data}) || responseFormatter.formatError(data);
                 });
         };
     }

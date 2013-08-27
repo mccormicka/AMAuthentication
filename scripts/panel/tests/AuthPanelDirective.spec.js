@@ -38,7 +38,8 @@ define(function (require) {
             module('amAuthPanelModule');
             inject(function($rootScope, $compile, $injector){
                 scope = $rootScope.$new();
-                scope.errorFormatter = function(){
+                scope.errorFormatter = function(data){
+                    console.log('Error formatter data', data);
                     return {title:'error', description:'error'};
                 };
                 scope.successFormatter = function(){
@@ -82,7 +83,27 @@ define(function (require) {
             formScope.email = 'test2@test.com';
             formScope.submit();
             $httpBackend.flush();
-            expect(scope.errorFormatter).toHaveBeenCalled();
+            expect(scope.errorFormatter).toHaveBeenCalledWith({
+                'title': 'api.success.error',
+                'description': 'Error'
+            });
+        });
+
+        it('Call Error Formatter when passed to reset', function () {
+            spyOn(scope, 'errorFormatter').andCallThrough();
+            $httpBackend.expectPOST('/reset', {email: 'test2@test.com'}).respond(404,{
+                'title': 'api.success.error',
+                'description': 'Error'
+            });
+            var form = $(directive).find('#reset-form');
+            var formScope = angular.element(form).scope();
+            formScope.email = 'test2@test.com';
+            formScope.submit();
+            $httpBackend.flush();
+            expect(scope.errorFormatter).toHaveBeenCalledWith({
+                'title': 'api.success.error',
+                'description': 'Error'
+            });
         });
     });
 });

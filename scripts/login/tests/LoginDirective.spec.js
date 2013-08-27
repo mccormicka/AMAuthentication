@@ -47,10 +47,9 @@ define(function (require) {
                 expect(scope.endpoint).toBe('/login');
             });
 
-            it('Show an error message when there is an invalid email password sent to the server', function () {
+            iit('Show an error message when there is an invalid email password sent to the server', function () {
                 $httpBackend.expectPOST('/login', {email: 'test@test.com', password: 'testing'}).respond(400,{
                     'title': 'api.error.invalid.params',
-                    'status': 400,
                     'description': 'Invalid Parameters were supplied with the request'
                 });
                 expect(directive.html()).not.toContain('Invalid Parameters were supplied with the request');

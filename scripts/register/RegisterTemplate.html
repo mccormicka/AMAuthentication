@@ -15,8 +15,9 @@
                ng-required="true"
                 />
 
-        <div class="alert alert-error" ng-show="registerForm.email.$invalid && registerForm.email.$dirty && registerForm.email.$error.required">
-            <strong>Invalid Email!</strong><br/>You must provide an email
+        <div class="alert alert-error"
+             ng-show="registerForm.email.$dirty && (registerForm.email.$invalid || registerForm.email.$error.required)">
+            <strong>Invalid Email!</strong><br/>You must provide a valid email address
         </div>
 
         <!-- PASSWORD -->

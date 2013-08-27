@@ -16,8 +16,8 @@
                 />
 
         <div class="alert alert-error"
-             ng-show="loginForm.email.$invalid && loginForm.email.$dirty && loginForm.email.$error.required">
-            <strong>Invalid Email!</strong><br/>You must provide an email
+             ng-show="loginForm.email.$dirty && (loginForm.email.$invalid || loginForm.email.$error.required)">
+            <strong>Invalid Email!</strong><br/>You must provide a valid email address
         </div>
 
         <!-- PASSWORD -->

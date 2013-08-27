@@ -9,7 +9,7 @@
          forgot-redirect="{{forgotRedirect}}"
          register-redirect="{{registerRedirect}}"
          endpoint="{{loginEndpoint}}"
-         error-formatter="loginErrorFormatter(value)"
+         error-formatter="loginErrorFormatter({value:value})"
             >
     </div>
     <div am-register
@@ -21,7 +21,7 @@
          forgot-redirect="{{forgotRedirect}}"
          login-redirect="{{loginRedirect}}"
          endpoint="{{registerEndpoint}}"
-         error-formatter="registerErrorFormatter(value)"
+         error-formatter="registerErrorFormatter({value:value})"
             >
     </div>
 
@@ -30,11 +30,11 @@
          class="forgot-container"
          email="email"
          forgot-redirect="{{forgotRedirect}}"
-         success-formatter="forgotSuccessFormatter(value)"
+         success-formatter="forgotSuccessFormatter({value:value})"
          register-redirect="{{registerRedirect}}"
          login-redirect="{{loginRedirect}}"
          endpoint="{{forgotEndpoint}}"
-         error-formatter="forgotErrorFormatter(value)"
+         error-formatter="forgotErrorFormatter({value:value})"
             >
     </div>
 
@@ -45,7 +45,7 @@
          register-redirect="{{registerRedirect}}"
          login-redirect="{{loginRedirect}}"
          endpoint="{{resetEndpoint}}"
-         error-formatter="resetErrorFormatter(value)"
+         error-formatter="resetErrorFormatter({value:value})"
             >
     </div>
     <!-- END AUTH FORM -->

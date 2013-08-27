@@ -87,20 +87,23 @@ define(function (require) {
             });
 
             it('Use an error formatter if present', function () {
-                scope.errorFormatter = function () {
+                scope.errorFormatter = function (data) {
                     return {
                         title: 'formatted',
                         description: 'formatted Description'
                     };
                 };
 
+                spyOn(scope, 'errorFormatter').andCallThrough();
+
                 var controller = new Test(scope, $http, $window, errorFormatter, redirectUtil);
                 expect(controller).toBeDefined();
-                $httpBackend.expectPOST('/register', {email: 'test@test.com', password: 'testing'}).respond(404);
+                $httpBackend.expectPOST('/register', {email: 'test@test.com', password: 'testing'}).respond(404,{data:'error'});
                 scope.submit();
                 $httpBackend.flush();
                 expect($window.location.href).toBe('');
                 expect(scope.text.error).toEqual({ title : 'formatted', description : 'formatted Description' });
+                expect(scope.errorFormatter).toHaveBeenCalledWith({data:'error'});
             });
 
         });

@@ -118,9 +118,6 @@ define(function (require) {
                 expect(scope.forgot).toBe(false);
                 expect(scope.register).toBe(false);
             });
-
-
-
         });
 
         describe('SHOULD NOT', function () {
