@@ -39,6 +39,10 @@ define(function (require) {
             'title': 'api.success.ok',
             'description': 'password.reset.successful'
         });
+        $httpBackend.whenPOST('/register', {email:'duplicate@register.com',password: 'registering'}).respond(409,{
+            'title': 'api.success.error',
+            'description': 'duplicate'
+        });
     });
 
     angular.bootstrap(document, ['demo']);
