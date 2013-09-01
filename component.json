@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mccormicka/PACKAGE NAME.git"
+    "url": "git://github.com/mccormicka/AMAuthentication.git"
   },
   "dependencies": {
     "requirejs": "~2.1.8",
