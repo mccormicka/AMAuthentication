@@ -19,29 +19,46 @@ define(function (require) {
             $scope.resetPassword = function(){
                 $window.location.href = '#/?token=12345&email=reset@reset.com#reset';
             };
+
+            $scope.translations = {
+                register:{
+                    title:'Register Title',
+                    submit:'Register'
+                },
+                forgot:{
+                    title: 'Forgot Title'
+                },
+                login:{
+                    title: 'Login Title'
+                },
+                reset:{
+                    title: 'Reset Title'
+                }
+
+            };
         });
 
-    module.run(function ($httpBackend) {
+    module.run(function ($httpBackend, $sce) {
         $httpBackend.whenPOST('/login', {email: 'login@login.com', password: 'loggingin'}).respond(200);
         $httpBackend.whenPOST('/login', {email: 'login2@login.com', password: 'loggingin'}).respond(400,{
             'title': 'api.error.invalid.params',
-            'description': 'Invalid Parameters were supplied with the request'
+            'description': $sce.trustAsHtml('Invalid Parameters were supplied with the request')
         });
         $httpBackend.whenPOST('/forgot', {email: 'forgot@forgot.com'}).respond(200, {
             'title': 'api.success.ok',
-            'description': 'password.reset.email.sent'
+            'description': $sce.trustAsHtml('password.reset.email.sent')
         });
         $httpBackend.whenPOST('/reset', {email:'reset@reset.com',password: 'resetting', token:'12345'}).respond(200,{
             'title': 'api.success.ok',
-            'description': 'password.reset.successful'
+            'description': $sce.trustAsHtml('password.reset.successful')
         });
         $httpBackend.whenPOST('/register', {email:'register@register.com',password: 'registering'}).respond(200,{
             'title': 'api.success.ok',
-            'description': 'password.reset.successful'
+            'description': $sce.trustAsHtml('password.reset.successful')
         });
         $httpBackend.whenPOST('/register', {email:'duplicate@register.com',password: 'registering'}).respond(409,{
             'title': 'api.success.error',
-            'description': 'duplicate'
+            'description': $sce.trustAsHtml('duplicate')
         });
     });
 

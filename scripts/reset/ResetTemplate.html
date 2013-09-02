@@ -1,17 +1,17 @@
 <div class="well span4">
     <!-- START RESET PASSWORD FORM -->
     <form ng-hide="text.success" id="reset-form" class="" method="post" novalidate name="resetForm" ng-submit="submit()">
-        <h1>Change Password</h1>
+        <h1>{{text.title}}</h1>
         <hr/>
         <!-- PASSWORD -->
 
-        <label for="reset-password">Password</label>
+        <label for="reset-password">{{text.password.title}}</label>
         <input id="reset-password"
                ng-model="password"
                type="password"
                name="password"
                class="pass"
-               placeholder="Password"
+               placeholder="{{text.password.placeholder}}"
                ng-minlength="6"
                ng-disabled="loading"
                ng-required="true"
@@ -19,11 +19,11 @@
 
         <div class="alert alert-error"
              ng-show="resetForm.password.$invalid && resetForm.password.$dirty && resetForm.password.$error.minlength">
-            <strong>Invalid Password!</strong><br/>Must be at least 6 characters long
+            <strong>{{text.password.invalidTitle}}</strong><br/>{{text.password.invalidLength}}
         </div>
         <div class="alert alert-error"
              ng-show="resetForm.password.$invalid && resetForm.password.$dirty && resetForm.password.$error.required">
-            <strong>Invalid Password!</strong><br/>You must provide a password
+            <strong>{{text.password.invalidTitle}}</strong><br/>{{text.password.invalidDescription}}
         </div>
         <div class="clear-fix"></div>
         <button id="reset-submit" type="submit" class="btn btn-primary" ng-disabled="loading || resetForm.$invalid">
@@ -31,16 +31,16 @@
         </button>
         <div class="clear-fix"></div>
         <div class="alert alert-error" ng-show="text.error">
-            <strong>{{text.error.title}}</strong><br/>{{text.error.description}}
+            <strong>{{text.error.title}}</strong><br/><span ng-bind-html="text.error.description"></span>
         </div>
         <hr/>
-        <a href="" ng-click="register()" ng-show="registerRedirect">Create an Account</a>
-        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>
+        <a href="" ng-click="register()" ng-show="registerRedirect">{{text.registerLink}}</a>
+        <a href="" ng-click="login()" ng-show="loginRedirect" >{{text.loginLink}}</a>
     </form>
 
     <div class="alert alert-success" ng-show="text.success">
-        <strong>{{text.success.title}}</strong><br/>{{text.success.description}}<br/>
-        <a href="" ng-click="login()" ng-show="loginRedirect" >Sign In</a>
+        <strong>{{text.success.title}}</strong><br/><span ng-bind-html="text.success.description"></span><br/>
+        <a href="" ng-click="login()" ng-show="loginRedirect" >{{text.loginLink}}</a>
     </div>
     <!-- END RESET PASSWORD FORM -->
 </div>

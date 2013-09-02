@@ -14,7 +14,7 @@ module.exports = function (grunt) {
 
         clean: {
             options: { force: true },
-            all: ['dist/<%= pkg.name %>' + '.js', 'dist/<%= pkg.name %>' + '.min.js']
+            all: ['dist/']
         },
 
         //Tests Client
@@ -96,10 +96,10 @@ module.exports = function (grunt) {
                     baseUrl: './',
                     mainConfigFile: 'require.config.js',
                     out: 'dist/<%= pkg.name %>' + '.js',
-                    optimize: 'none',
-                    exclude: [
-                        'angular', 'text'
-                    ]
+                    optimize: 'none'//,
+//                    exclude: [
+//                        'angular', 'text'
+//                    ]
 //                    useSourceUrl: true
                 }
             },
@@ -113,7 +113,7 @@ module.exports = function (grunt) {
                     mainConfigFile: 'require.config.js',
                     out: 'dist/<%= pkg.name %>' + '.min.js',
                     exclude: [
-                        'angular', 'text'
+                        'angular', 'text', 'lodash', 'jquery'
                     ]
                 }
             }

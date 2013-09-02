@@ -11,7 +11,8 @@ define(function (require) {
                 forgotRedirect: '@',
                 loginRedirect: '@',
                 endpoint: '@',
-                errorFormatter:'&'
+                errorFormatter:'&',
+                text:'='
             },
             template: require('text!scripts/register/RegisterTemplate.html'),
             controller: require('scripts/register/RegisterController')

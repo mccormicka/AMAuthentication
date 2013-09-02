@@ -1,11 +1,39 @@
-define(function () {
+define(function (require) {
     'use strict';
+
+    var _ = require('lodash');
+
+    //-------------------------------------------------------------------------
+    //
+    // Public Methods
+    //
+    //-------------------------------------------------------------------------
+
+    function localizeText($scope) {
+        $scope.text = _.defaults($scope.text || {}, {
+            title: 'Reset',
+            submit: 'Submit',
+            loginLink: 'Forgot Your Password?',
+            registerLink: 'Create An Account',
+            password: {
+                title: 'Password',
+                placeholder: 'Password',
+                invalidTitle: 'Invalid Password!',
+                invalidLength: 'Must be at least 6 characters long',
+                invalidDescription: 'You must provide a password'
+            }
+        });
+    }
+
+    //-------------------------------------------------------------------------
+    //
+    // Public Methods
+    //
+    //-------------------------------------------------------------------------
 
     function Controller($scope, $http, $window, responseFormatter, redirectUtil) {
         $scope.loading = false;
-        $scope.text = {
-            submit: 'Submit'
-        };
+        localizeText($scope);
 
         redirectUtil.init($scope);
 

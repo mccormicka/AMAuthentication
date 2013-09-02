@@ -10,7 +10,8 @@ define(function (require) {
                 endpoint: '@',
                 errorFormatter:'&',
                 successFormatter:'&',
-                successRedirect:'@'
+                successRedirect:'@',
+                text:'='
             },
             template: require('text!scripts/reset/ResetTemplate.html'),
             controller: require('scripts/reset/ResetController')

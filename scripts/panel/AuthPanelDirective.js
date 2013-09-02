@@ -28,7 +28,8 @@ define(function (require) {
                 resetSuccess: '@',
                 resetErrorFormatter: '&',
 
-                searchParam: '@'
+                searchParam: '@',
+                translations: '='
             },
             template: require('text!scripts/panel/AuthPanelTemplate.html'),
             controller: require('scripts/panel/AuthPanelController'),

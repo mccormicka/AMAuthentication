@@ -1,11 +1,39 @@
-define(function () {
+define(function (require) {
     'use strict';
+
+    var _ = require('lodash');
+
+    //-------------------------------------------------------------------------
+    //
+    // Private Methods
+    //
+    //-------------------------------------------------------------------------
+
+    function localizeText($scope) {
+        $scope.text = _.defaults($scope.text || {}, {
+            title: 'Forgot Password',
+            submit: 'Submit',
+            registerLink: 'Create an Account',
+            loginLink: 'Sign In',
+            email: {
+                title: 'Email',
+                placeholder: '@email',
+                invalidTitle: 'Invalid Email!',
+                invalidDescription: 'You must provide a valid email address'
+            }
+        });
+    }
+
+    //-------------------------------------------------------------------------
+    //
+    // Public Methods
+    //
+    //-------------------------------------------------------------------------
 
     function Controller($scope, $http, responseFormatter, redirectUtil) {
         $scope.loading = false;
-        $scope.text = {
-            submit: 'Submit'
-        };
+        localizeText($scope);
+
         redirectUtil.init($scope);
 
         $scope.submit = function () {

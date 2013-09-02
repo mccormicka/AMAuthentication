@@ -2,11 +2,13 @@
 var require = {
     baseUrl: '/',
     paths: {
+        'am-authentication': 'scripts/index',
         angular: 'components/angular/angular',
         'angular-mocks': 'components/angular-mocks/angular-mocks',
         text: 'components/text/text',
         jquery: 'components/jquery/jquery.min',
-        'am-authentication': 'scripts/index'
+        lodash: 'components/lodash/dist/lodash.min'
+
     },
     shim:{
         angular: {
@@ -15,9 +17,6 @@ var require = {
         'angular-mocks':{
             deps:['angular'],
             exports:'angular-mocks'
-        },
-        jquery:{
-            exports:['jquery']
         }
     }
 };
