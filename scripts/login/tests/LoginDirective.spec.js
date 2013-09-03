@@ -14,7 +14,8 @@ define(function (require) {
                 'success-redirect="application" ' +
                 'forgot-redirect="forgot" ' +
                 'register-redirect="register" ' +
-                'endpoint="/login" > </div>';
+                'endpoint="/login"' +
+                'text="translations" > </div>';
 
             var directive;
             var scope;

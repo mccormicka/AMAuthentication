@@ -113,7 +113,7 @@ module.exports = function (grunt) {
                     mainConfigFile: 'require.config.js',
                     out: 'dist/<%= pkg.name %>' + '.min.js',
                     exclude: [
-                        'angular', 'text', 'lodash', 'jquery'
+                        'angular', 'text', 'lodash', 'jquery', 'angular-sanitize'
                     ]
                 }
             }

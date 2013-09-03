@@ -17,7 +17,8 @@ define(function (require) {
                 'forgot-redirect="forgot" ' +
                 'login-redirect="login" ' +
                 'error-formatter="errorFormatter(value)" ' +
-                'endpoint="/register" > </div></div>';
+                'endpoint="/register"' +
+                'text="translations" > </div></div>';
 
             var directive;
             var scope;

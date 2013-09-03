@@ -28,7 +28,8 @@ define(function (require) {
             'reset-redirect="reset" ' +
             'reset-endpoint="/reset" ' +
             'reset-success="forgotSuccess" ' +
-            'reset-error-formatter="errorFormatter(value)"> </div>';
+            'reset-error-formatter="errorFormatter(value)"' +
+            'translations="translations"> </div>';
 
         var scope;
         var directive;

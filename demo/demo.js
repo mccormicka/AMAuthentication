@@ -38,27 +38,27 @@ define(function (require) {
             };
         });
 
-    module.run(function ($httpBackend, $sce) {
+    module.run(function ($httpBackend) {
         $httpBackend.whenPOST('/login', {email: 'login@login.com', password: 'loggingin'}).respond(200);
         $httpBackend.whenPOST('/login', {email: 'login2@login.com', password: 'loggingin'}).respond(400,{
             'title': 'api.error.invalid.params',
-            'description': $sce.trustAsHtml('Invalid Parameters were supplied with the request')
+            'description':'Invalid Parameters were supplied with the request'
         });
         $httpBackend.whenPOST('/forgot', {email: 'forgot@forgot.com'}).respond(200, {
             'title': 'api.success.ok',
-            'description': $sce.trustAsHtml('password.reset.email.sent')
+            'description':'<a href="##signin">Sign In</a>'
         });
         $httpBackend.whenPOST('/reset', {email:'reset@reset.com',password: 'resetting', token:'12345'}).respond(200,{
             'title': 'api.success.ok',
-            'description': $sce.trustAsHtml('password.reset.successful')
+            'description': 'password.reset.successful'
         });
         $httpBackend.whenPOST('/register', {email:'register@register.com',password: 'registering'}).respond(200,{
             'title': 'api.success.ok',
-            'description': $sce.trustAsHtml('password.reset.successful')
+            'description': 'password.reset.successful'
         });
         $httpBackend.whenPOST('/register', {email:'duplicate@register.com',password: 'registering'}).respond(409,{
             'title': 'api.success.error',
-            'description': $sce.trustAsHtml('duplicate')
+            'description':'duplicate'
         });
     });
 

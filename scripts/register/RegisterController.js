@@ -52,7 +52,6 @@ define(function (require) {
                     $window.location.href = $scope.successRedirect;
                 })
                 .error(function (data) {
-
                     $scope.text.submit = 'Submit';
                     $scope.loading = false;
                     $scope.text.error = $scope.errorFormatter && $scope.errorFormatter({value:data}) || responseFormatter.formatError(data);
